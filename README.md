@@ -2,9 +2,9 @@
 This play's in a CSA = COMMUNITY SUPPORTED AGRICULTURE environment.<br>
 It started with the idea to collect crop data via html to spit it out in any Exel-format desired.<br>
 And this Idea is somehow still alive, Vegetables gardening note tool.<br>
-### System
+#### System
 Postgres Python3 Flask SQLAlchemy WTForms Jinja2 HTML ZURB-Foundation jQuery
-###### Model (a game of erp)
+#### Model (a game of erp)
 Per database/subDomain there is one adjacency list of products and one adjacency list of factions, separation of concerns, 
 implied Usr highness groups. One database per subdomain maintenance nightmare. The shortest time period is 1 Day.<br>
 There are resources and processments like soil and vegetables gardening. A "business logic" may be registered to a faction.<br>
