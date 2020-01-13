@@ -10,8 +10,9 @@ implied Usr highness groups. One database per subdomain maintenance nightmare. T
 There are resources and processments like soil and vegetables gardening. A "business logic" may be registered to a faction.<br>
 A user is member of a faction in the first place to operate the logic by role. While processing the business logic, products appear. In my case vegetables to be harvested.<br>
 A amount of a product can be transferred from one faction to another. From "vegetables gardening" to "members of the community" every friday, or from "vegetables gardening" to "vegetables gardening" to monitor daily crops.<br>
-The root of factions can be thought of as the center of community interests (the farm, groups of farms, a village).<br>
+The root of factions can be thought of as the center of community interests (the farm, group of farms, a village).<br>
 
 The  model is glued to PostgreSQL and breaks referential integrity by allowing nested sets of primary keys<br>
 from different tables in one relation as well as array(of,foreign,keys).<br>
+
 
