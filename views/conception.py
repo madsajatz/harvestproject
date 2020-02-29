@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#deprecated see vegetables.py
 # app/views/vegetable_farming_blueprint.py
 
 from flask import Blueprint, render_template, request, url_for, redirect
