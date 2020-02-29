@@ -64,8 +64,7 @@ def pg_date(date_string):
     pg_format default is:'YY-mm-dd' / date.isoformat()
     TODO using a glogal TEMPLATE_DATE_FORMAT eg:['dd.mm.Y']
     if u know the format at app creation time then u like :D
-    ps. there is a better solution
-    (regex)
+
     """
     #l = [int(s) for s in date_string.split('-')]
     
@@ -92,8 +91,8 @@ def teardown_request(exception):
         db.close()
 
 ############################################################
-# url_prefix generell http://fraction_id/cultivation_year
-# 5.Jan: ist nicht keinen gute Idee da nicht RESTfull (resource/<fraction_id>/<cultivation_year>) ist besser
+# url_prefix generell http://fraction_id/resource
+
 
 @app.url_defaults
 def add_fraction_id(endpoint, values):
