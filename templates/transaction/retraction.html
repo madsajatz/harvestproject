@@ -1,0 +1,130 @@
+{#retraction.html#} 
+{% extends "base.html" %}
+
+{% block script %}
+    {{ super() }}
+    <script>$SCRIPT_ROOT={{request.script_root|tojson|safe}}</script>
+{% endblock %}
+{% block title%}Retour {{source_fraction.name}}&nbsp;&#8635;&lArr;&nbsp;{{fraction.name }} {% endblock title%}
+
+{% block topbarheadline %}
+<div class="stat">
+Retour {{source_fraction.name}}&nbsp;&#8635;&lArr;&nbsp;{{fraction.name }}
+</div>
+{% endblock topbarheadline %}
+
+{% block nav %}
+    {% if nav_dates %}
+    <ul class="no-bullet">
+     {%- for nav_date in nav_dates %}
+        
+        {%- if session['acquiredate'] and session['acquiredate'] == nav_date.date|string %}
+        <li class="label secondary">
+        {% else %}
+        <li>
+        {% endif -%}
+
+         <a href="{{url_for('transaction.retract_twopack', fraction_id=fraction.fraction_id, source_fraction_id=source_fraction.fraction_id, acquiredate=nav_date.date)}}">
+         {{- momentjs(nav_date.date).format('l') -}}</a>
+       </li>
+     {% endfor -%}  
+    </ul>
+    {% endif %}
+    
+{% endblock nav %}
+
+{% block flash %}
+{{ super() }}
+{% endblock flash %}
+
+{% block headline %}{# session['acquiredate']|pgdate #}{% endblock headline %}
+
+{% block subheadline %}
+    {% if product_entries %}
+        {{product_entries.item_name}}
+        <small>{{product_entries.name_lat}}</small>
+    {% endif %}
+{% endblock subheadline %}
+
+{% block content %}
+{#style="background-color:powderblue;"#}
+{#grid-padding-x#}
+
+
+<div class="grid-container" >
+    <div class="grid-x grid-padding-x">
+        {% if transactions %} {## transaction.etract_twopack ##}
+            <nav class="cell auto" style="background-color:powderblue;">
+                <table clas="hover">
+                    <caption>{{momentjs(session['acquiredate']).format('LL')}}#{{session['acquiredate']}}#{{ session['acquiredate']|pgdate }}</caption>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th></th>
+                            <th>Netto</th>
+                            <th>Waage</th>
+                            <th>Retour</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>
+                            
+                                <a href="{{url_for('transaction.retract_getsome',
+                                fraction_id=fraction.fraction_id,
+                                source_fraction_id=source_fraction.fraction_id,
+                                product_id=transaction.product_id,
+                                unit_id=transaction.unit_id )}}">
+                                {{ transaction.item_name }}</a>
+                            
+                            </td>
+                            <td><strong>{{transaction.unit_name}}</strong></td>
+                            <td>{{transaction.netto|replace(".",",")}}</td>
+                            <td>{{transaction.brutto|replace(".",",")}}</td>
+                            <td>{% if transaction.retour|float == 0 %}
+                                    -
+                                {% else %}
+                                    {{transaction.retour|replace(".",",")}}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </nav>
+        {% endif %}
+        {% if form %} {## transaction.retract_getsome ##}
+            <div class="cell auto">
+                <form action="{{request.url}}" method="POST">
+                {% include 'transaction/retraction_form.html' %}
+                </form>
+            </div><!--cell-->
+        {% endif %}
+    
+    </div><!--grid-x-->
+    <script>
+    window.onload = function() {
+    document.getElementById("amount").focus();
+    };
+    </script>
+
+
+
+</div><!--grid-container-->
+<p>...</p>
+
+
+
+
+
+
+
+{%endblock content%}
+
+{%block aside%}
+*THIS is reTraction's ASIDE*
+{{super()}}
+{%endblock aside%}
+
+

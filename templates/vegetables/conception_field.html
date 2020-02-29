@@ -1,0 +1,45 @@
+{% extends "base.html"%}
+{% block title %} {{fraction.name}} Flächenbedarf {{year_of_growth}} {%endblock%} 
+
+{% block nav %}
+{% endblock nav %}
+
+{% block content %}
+<DIV class="table-scroll">
+    <table class="hover">
+        <caption class="text-center">Flächenbedarf {{fraction.name}} {{year_of_growth}}</caption>
+            <thead>
+                <tr>
+                    <th>KW</th>
+                    <th>Fläche</th>
+                    <th>Anbauform</th>
+                    <th>qm</th>
+                    <th>Länge</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>
+                    <strong>{{ entry.sort_week }}</strong>
+                </td>
+                <td>
+                    {{ entry.area_name }}
+                </td>
+                <td>
+                    {{ entry.growkind_name }}
+                </td>
+                <td>
+                    {{ entry.qm }}
+                </td>
+                <td>
+                    {{ entry.length }}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+</DIV>
+{% endblock content %}
+
+{% block aside %} {% endblock aside %}

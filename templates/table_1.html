@@ -1,0 +1,19 @@
+{# lable_1 #}
+{% extends "base.html"%}
+
+<div class="expanded row">
+<nav class="hidden-print">
+{% block nav %}
+<h3> layout_1 inside super nav tag.</h3>
+{% endblock nav %}
+</nav>
+{% block content %}
+<main role="main"> 
+{% block main %}
+
+<h3> Layout_1 inside super Main tag. </h3>
+
+{% endblock main %}
+</main>
+</div>
+{%endblock content %}

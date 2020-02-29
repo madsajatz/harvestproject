@@ -1,0 +1,40 @@
+{% extends "base.html"%}
+{% from '_macros.html' import vegetables_conception_card %}
+{% block title %} {{area.our_name}} {{year_of_growth}} {%endblock%}
+{% block nav %}
+    <ul class="vertical dropdown menu" data-dropdown-menu><!--mainstart-->
+        {% for element in productlist recursive%}
+            <li>
+            <a href="{{ url_for('.conception_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=element.product_id) }}">{{element.item_name}}</a>
+            {%- if element.children -%}
+                <ul class="menu vertical nested">{{ loop(element.children) }}</ul>
+            {%- endif %}
+            </li>
+        {% endfor %}
+    </ul><!--mainend--> 
+{% endblock nav %}
+{% block headline%}
+    Planung für <a href="{{url_for('.conception_index', fraction_id=fraction.fraction_id,year_of_growth=year_of_growth)}}">{{fraction.name}} {{year_of_growth}}</a> {{ area.our_name }} 
+{% endblock headline%}
+{% block subheadline %}
+{% endblock subheadline %}
+{% block content %}
+    <div class="cell">
+        {% for entrie in entries %}
+            {{ vegetables_conception_card(entrie) }}
+        {% endfor %}
+    </div>
+
+
+{% endblock content %}   
+{% block aside %}
+    <h5>Flächen {{year_of_growth}}</h5>
+    {% for entrie in area_info %}
+        {% if entrie.area_id %}
+            <a href="{{ url_for('.conception_area', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, area_id=entrie.area_id) }}">{{ entrie.our_name }}</a>
+        {% endif %}
+        <br>
+        {{ entrie.square_of_field }}m²
+        <hr>
+    {% endfor %}
+{% endblock aside %}

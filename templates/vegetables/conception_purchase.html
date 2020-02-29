@@ -1,0 +1,69 @@
+{% extends "base.html"%}
+{% block title %} {{fraction.name}} Zukauf {{year_of_growth}}{%endblock%}
+{% block headline %}{% endblock headline %}
+{% block subheadline %}{% endblock subheadline %}
+{% block nav %}{% endblock nav %}
+{% block content %}
+
+<table  class="table table-bordered table-hover table-condensed">
+<caption class="text-center" ><a href="{{ url_for('vegetables.conception_index', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }}">Planung {{fraction.name}} {{year_of_growth}}</a> Zukauf</caption>
+  <thead>
+    <tr>
+      <th class="text-center">KW</th>
+      <th class="text-center">Anzahl</th>
+      <th>Name</th>      
+      <th>Kultur</th>
+      <th>Sorte</th>
+      <th>Notiz</th>
+    </tr>
+  </thead>
+  {% for entry in entries %}
+  <tr>
+    <td class="text-center">
+      {{ entry.week_of_plan_plant|e }}
+    </td>
+    <td class="text-center">
+      {{ entry.amount_of_plants }}
+    </td>
+    <td><a href="{{ url_for('.conception_edit', conception_id=entry.id,  next=request.url) }}" title="Planung bearbeiten">
+      {{ entry.name|e}}
+        </a>
+    </td>    
+    <td>
+      {{ entry.item_name|e }}
+    </td>
+
+    <td>
+      {% if entry.diversity_name %}"{{ entry.diversity_name }}" {% endif %}{% if entry.diversity_ident %} [{{ entry.diversity_ident }}] {% endif %}
+    </td>
+    <td>
+      {% if entry.hint %} {{ entry.hint }} {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock content%} 
+ 
+
+<!--
+  <ul class="list-unstyled">
+  
+  {% for entry in entries %}
+    
+      
+          <li> 
+            KW:{{entry.kw_plant}}&#x9;&#x9;Stk:{{ entry.anzahl }}&#x9;&#x9;{{ entry.name|safe }}&#x9;&#040;{{ entry.kultur|safe}}&#041;&#x9;{% if entry.sorte %}"{{ entry.sorte }}" {% endif %}{% if entry.ident %} [{{ entry.ident }}] {% endif %} 
+          </li>
+      
+    
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  
+  </ul>
+-->
+
+
+
+

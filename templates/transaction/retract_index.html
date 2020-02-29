@@ -1,0 +1,21 @@
+{#retraction.index.html#}
+{% extends "base.html" %}
+
+{% block title %}Retour{% endblock %}
+{% block topbarheadline %}<div class="stat">Retour&nbsp;&#8635;&lArr;&nbsp;Zurücknehmen</div>{% endblock topbarheadline %}
+{% block nav %}{% endblock nav %}
+{% block flash%}
+{{ super() }}
+{% endblock flash%}
+{% block headline %}{% endblock headline %}
+{% block subheadline %}{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('transaction.retract_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+Freilandgemüse <strong>&#8635;&lArr;</strong> CSA
+</a>
+<a href="{{ url_for('transaction.retract_twopack', source_fraction_id=4,fraction_id=3)}}" class="button large">
+Gewächshäuser <strong>&#8635;&lArr;</strong> CSA
+</a>
+{% endblock content %}
+{% block aside %}{% endblock aside %}
