@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#deprecated see vegetables.py
 # app/views/implementation
 
 from flask import Blueprint, render_template, request, abort, flash, url_for, redirect, g
