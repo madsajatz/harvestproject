@@ -7,8 +7,6 @@ The  model is glued to PostgreSQL and breaks referential integrity by allowing n
 from different tables in one relation as well as array(of,foreign,keys).<br>
 
 requirements wishlist
-
 Flask-Principal
-
 Flask_Admin
 
