@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#hvpapp or app/__init__.py 
+#
 from datetime import date
 from datetime import datetime
 
