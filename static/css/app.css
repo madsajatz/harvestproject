@@ -1,0 +1,64 @@
+/*conception_one....#f8f8f8*/
+
+.pivot{
+    box-shadow: 3px 3px 3px ForestGreen; /* color succes*/
+}
+
+    
+form {
+    padding:4px
+}
+
+.greenBG{
+    background-color:#e6f7d9;
+}
+
+
+
+.yellowBG{
+    background-color:#fff3d9;
+}
+/* now to style a <tr></tr> tag */
+#greenTR {background-color:#e6f7d9;}
+#greenTRpivot {background-color:#e6f7d9;border-bottom:2pt solid ForestGreen;}
+
+#yellowTR{background-color:#fff3d9;}
+#yellowTRpivot{background-color:#fff3d9;border-bottom:2pt solid ForestGreen;}
+/*
+@media all and (max-width: 35em) {
+  #sticky {
+    position: static;
+  }
+}
+*/
+
+/* onchange Computed_Fields glow a gradiend one time
+ background: linear-gradient(79deg, #ad1be2, #e9f1e8);
+background-size: 400% 400%;
+
+-webkit-animation: Computed_Field 32s ease only_ones;
+-moz-animation: Computed_Field 32s ease infinite;
+-o-animation: Computed_Field 32s ease infinite;
+animation: Computed_Field 32s ease infinite;
+
+@-webkit-keyframes Computed_Field {
+    0%{background-position:30% 0%}
+    50%{background-position:71% 100%}
+    100%{background-position:30% 0%}
+}
+@-moz-keyframes Computed_Field {
+    0%{background-position:30% 0%}
+    50%{background-position:71% 100%}
+    100%{background-position:30% 0%}
+}
+@-o-keyframes Computed_Field {
+    0%{background-position:30% 0%}
+    50%{background-position:71% 100%}
+    100%{background-position:30% 0%}
+}
+@keyframes Computed_Field {
+    0%{background-position:30% 0%}
+    50%{background-position:71% 100%}
+    100%{background-position:30% 0%}
+}
+*/
