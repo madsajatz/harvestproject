@@ -8,6 +8,8 @@ from different tables in one relation as well as array(of,foreign,keys).<br>
 
 requirements wishlist
 
+Flask-Babel
 Flask-Principal,
-Flask_Admin
+Flask-Admin,
+
 
