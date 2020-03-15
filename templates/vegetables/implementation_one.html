@@ -1,0 +1,65 @@
+{% extends "base.html"%}
+{% from '_macros.html' import vegetables_implementation_one %}
+{% from '_macros.html' import vegetables_conception_one %}
+
+{% block title %}{{the_product.item_name}} - Durchführung - {{year_of_growth}}
+{{fraction.name}}
+{%endblock title%}
+
+
+{% block nav %}
+    <ul class="vertical dropdown menu" data-dropdown-menu><!--mainstart-->
+        {%- for element in productlist recursive %}
+            <li>
+            <a href="{{ url_for ('.implementation_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=element.product_id) }}">{{element.item_name}}</a>
+            {%- if element.children -%}
+                <ul class=" vertical menu nested">{{ loop(element.children) }}</ul>
+            {%- endif %}
+            </li>
+        {% endfor %}
+    </ul><!--mainend-->  
+{% endblock nav %}
+
+{% set imp_list_count = imp_summary.count_of_sets %}
+{% block headline %}
+    {% if imp_list_count == 0 %}
+        Noch keine 
+        <a href="{{ url_for('.implementation_index', fraction_id=fraction.fraction_id,year_of_growth=year_of_growth) }}">Durchführung {{fraction.name}} {{year_of_growth}}</a> {{the_product.item_name}}        
+    {% else %}
+        Durchführungen
+        <a href="{{ url_for('.implementation_index',fraction_id=fraction.fraction_id,year_of_growth=year_of_growth) }}">{{fraction.name}} {{year_of_growth}}</a>
+        {{the_product.item_name}} - 
+        {% if imp_list_count == 1 %} ein Satz - 
+        {% else %}{{ imp_list_count }} Sätze - 
+        {% endif %}
+        {% if imp_summary.sum_amount_of_plants %}
+            {{ imp_summary.sum_amount_of_plants }}Stk. - 
+        {% endif %}
+        {% if imp_summary.sum_square_of_field %}
+            {{imp_summary.sum_square_of_field|round}} m² - 
+        {% endif %}
+        {% if imp_summary.sum_length_of_growlines %}
+            {{imp_summary.sum_length_of_growlines|round}} lfd. Meter
+        {% endif %}        
+        
+    {% endif %}
+{% endblock headline %}
+
+{% block subheadline %}
+    
+{% endblock subheadline %}
+
+{% block content %}      
+      <a class="button small expanded" href="{{ url_for('.implementation_new',fraction_id=fraction.fraction_id,year_of_growth=year_of_growth,product_id=the_product.product_id) }}">ungeplante Dürchführung starten</a>
+      {%for entrie in imp_entries%}
+        {{vegetables_implementation_one(entrie, pivot)}}
+      {%endfor%}
+      <hr>
+      {% if imp_summary.last_modified %}
+      <h6 class=" subheader text-right"><small>zuletzt bearbeitet {{ momentjs(imp_summary.last_modified).fromNow() }}</small></h6>
+      {% endif %}  
+        
+        
+        
+
+{% endblock content %}     

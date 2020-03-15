@@ -1,0 +1,54 @@
+{% extends "base.html"%}
+{% block title %} Kulturen auf Flächen {{fraction.name}} {{year_of_growth}} {%endblock%}
+{% block headline %}{% endblock headline %}
+{% block subheadline %}{% endblock subheadline %}
+{% block nav %}{% endblock nav %}
+{% block content %}
+<table  class="table ">
+<caption class="text-center" >Kulturen auf Flächen <a href="{{ url_for('vegetables.conception_index', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }}">Planung {{fraction.name}} {{year_of_growth}}</a></caption>
+  <thead>
+    <tr>
+    <th>Kultur</th>
+    <th>Anbauart</th>
+    <th>Schlag</th>
+    <th>qm</th>
+    <th>Pflanzenanzahl</th>
+    <th>Länge</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for entry in entries %}
+    <tr>
+     
+          <td> 
+             {% if entry.item_name %} {{ entry.item_name }} {% else %} - {% endif %}
+          </td>
+          
+          <td>
+             {% if entry.growkind_name %} {{ entry.growkind_name }} {% else %} - {% endif %}
+          </td>
+          
+          <td>
+             {% if entry.area_name %} {{ entry.area_name }} {% else %} - {% endif %}
+          </td>
+          
+          <td>
+             {% if entry.qm %} {{ entry.qm }} {% else %} - {% endif %}
+          </td>
+          
+          <td>
+             {% if entry.sumplants %} {{ entry.sumplants }} {% else %} - {% endif %}
+          </td>
+          
+          <td>
+             {% if entry.length %} {{ entry.length }} {% else %} - {% endif %}
+          </td>
+    </tr>
+  {% else %}
+    <em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock content%}
+{% block aside %}
+{% endblock aside %}

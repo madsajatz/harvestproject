@@ -1,0 +1,537 @@
+{# veggi_conception_input_form.html #}
+{% extends "base.html"%}
+{% from '_macros.html' import render_wtf_field %}
+
+{# HARDCODED card style="background-color #}
+
+{% block script %}
+    {{ super() }}
+    <script>$SCRIPT_ROOT={{request.script_root|tojson|safe}}</script>
+{% endblock %}
+
+{% block title %}
+{% if edit %}
+    Planänderung
+{% else %}
+    Neuer Plan für 
+{% endif %}
+ {{the_product.item_name}} {{year_of_growth}} {{fraction.name}}
+{% endblock title%}
+
+{% block nav %}  {#rep#}      
+    <ul class="vertical dropdown menu" data-dropdown-menu><!--mainstart-->
+        {%- for element in productlist recursive %}
+            <li>
+            <a href="{{ url_for('.conception_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=element.product_id) }}">{{element.item_name}}</a>
+            {%- if element.children-%}
+                <ul class="menu vertical nested">{{ loop(element.children) }}</ul>
+            {%- endif %}
+            </li>
+        {%- endfor %}
+</ul><!--mainend-->
+{% endblock nav%}        
+
+{% block headline %}
+    {% set list_count = summary.count_of_sets%}
+    {% if list_count > 0 %}
+        <a href="{{ url_for('.conception_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=the_product.product_id ) }}">
+        {{fraction.name}} {{the_product.item_name}} {{year_of_growth}} 
+        </a> -
+        {% if list_count == 1 %} ein Satz
+        {% else %} {{ list_count }} Sätze
+        {% endif %}
+        {{summary.sum_amount_of_plants|default('~',true)}}Stk.
+        {{summary.sum_square_of_field|default('~',true)}}m²
+    {% else %}
+        <a href="{{ url_for('.conception_index', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth) }}">
+        {{fraction.name}} {{year_of_growth}} 
+        </a>    
+    {% endif %}
+{% endblock headline %} 
+
+{% block subheadline %}
+    {% if edit %}
+        {% if data.is_locked %}
+            Abgeschlossener Plan für {{form.name.data}} {{year_of_growth}}
+        {% else %}
+            Planänderung für {{form.name.data}} {{year_of_growth}}
+        {% endif %}
+    {% else %}
+        {% if summary.count_of_sets == 0%}
+            Erster
+        {% else %}
+            Neuer 
+        {% endif %}
+        Satz für {{the_product.item_name}} {{year_of_growth}}
+    {% endif %}
+{% endblock subheadline %}
+
+{% block content%}
+<DIV class="button expanded">Erstelle aus dieser Planung X-mal Durchfürungen mit den Eigenschaftem von ...</DIV>
+<div class="callout warning">
+        <form   method="post">
+            {{ form.hidden_tag() }}
+            
+            {# next:{{ next }} #}
+            
+            <div class="grid-x grid-margin-x"><!--first row-->
+                <div class="cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.name) }}
+                </div>
+                <div class="cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.diversity_id) }}
+                </div>
+                <div class="cell small-12 medium-4 large-4 ">
+                    {{ render_wtf_field(form.area_id) }}
+                </div>
+            </div><!--first row-->
+            <div class="grid-x grid-margin-x"><!--second row-->
+                <div class="cell small-12 medium-4 large-4">
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-4 ">
+                            {{ render_wtf_field(form.week_of_plan_seed) }}
+                        </div>
+                        <div class="cell small-8">
+                            {{ render_wtf_field(form.date_of_plan_seed) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="cell small-12 medium-4 large-4">     
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-4">
+                            {{ render_wtf_field(form.week_of_plan_plant) }}
+                        </div>
+                        <div class="cell small-8 ">
+                            {{ render_wtf_field(form.date_of_plan_plant) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="cell small-12 medium-4 large-4">     
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-4">
+                            {{ render_wtf_field(form.week_of_plan_crop) }}
+                        </div>
+                        <div class="cell small-8">
+                            {{ render_wtf_field(form.date_of_plan_crop) }}
+                        </div>
+                    </div>
+                </div>
+            </div><!--second row-->
+            <fieldset class="fieldset"><legend>{{form.art_of_cultivation}}</legend>
+                <div class="grid-x grid-margin-x"><!--third row-->
+                    <div class="cell small-12 medium-4 large-4">
+                       {{ render_wtf_field(form.amount_of_plants) }}
+                    </div>
+                    <div class="cell small-12 medium-4 large-4">
+                       {{ render_wtf_field(form.planting_interval) }}
+                    </div>
+                    <div class="cell small-12 medium-4 large-4">
+                       {{ render_wtf_field(form.plants_per_square) }}
+                    </div>
+                </div><!--third row-->
+                <div class="grid-x grid-margin-x"><!--fourth row-->
+                    <div class="cell small-12 medium-2">
+                        {{ render_wtf_field(form.amount_of_grow_kind_units) }}
+                    </div>
+                    <div class="cell small-12 medium-4">
+                        {{ render_wtf_field(form.grow_kind_id)}}
+                    </div>
+                    <div class="cell small-12 medium-3">
+                        {{ render_wtf_field(form.length_of_field) }}
+                    </div>
+                    <div class="cell small-12 medium-3">
+                        {{ render_wtf_field(form.square_of_field) }}
+                    </div>
+                    <spam id="ajax_message" style="color:red"></spam>
+                </div><!--fourth row-->
+            </fieldset>
+            <div class="grid-x grid-margin-x"><!--fifth row-->
+                <div class="cell small-12 medium-8">
+                    {{ render_wtf_field(form.hint) }}
+                </div>
+                <div class="cell small-12 medium-2">
+                    {{ render_wtf_field(form.amount_of_seed) }}
+                </div>
+                <div class="cell small-12 medium-2">
+                    {{render_wtf_field(form.unit_of_seed)}}
+                </div>
+            </div><!--fifth row-->
+            <div class="grid-x grid-margin-x"><!--sixth row-->
+                <div class="cell small-12">
+                    {{ render_wtf_field(form.note) }}
+                </div>
+            </div><!--sixth row-->
+            
+            <div class="grid-x grid-margin-x"><!--seventh row-->
+                <div class="cell small-12 medium-6">
+                    <button class="button" 
+                    {% if edit and data.is_locked %} disabled {% endif %}
+                    id="submit" type="submit">Machen Sie es so!</button>
+                    {###########################################################################################
+                    {% if edit and data %}
+                        <a href="{{url_for('.conception_by_product_id',
+                            fraction_id=fraction.fraction_id,
+                            year_of_growth=year_of_growth,
+                            product_id=the_product.product_id,
+                            pivot=data.id or '')}}" class="button secondary">Abrechen</a>
+                    {% else %}
+                        <a href="{{url_for('.conception_by_product_id',
+                            fraction_id=fraction.fraction_id,
+                            year_of_growth=year_of_growth,
+                            product_id=the_product.product_id)}}" class="button secondary">Abrechen</a>
+                    {% endif %}
+                    ##############################################################################################}
+                    {% if next %}{#!#}
+                            <a href="{{next}}" class="button secondary">Abrechen</a>                    
+                    {% else %}
+                            <a href="{{url_for('.conception_by_product_id',
+                            fraction_id=fraction.fraction_id,
+                            year_of_growth=year_of_growth,
+                            product_id=the_product.product_id
+                            )}}" class="button secondary">Abrechen</a>
+                    {% endif %}
+                        
+                        
+                </div>
+                <div class="cell small-12 medium-6">
+                    {% if edit %}
+                        {% if form.id.data is not none %}
+                            <h6 class="subheader text-right"><small>
+                            <spam>erstellt {{ momentjs(data['creation_date']).fromNow() }} </spam>
+                            <br>
+                            {% if data['is_locked'] %}
+                                <span>archiviert am {{ momentjs(data['lock_date']).format('LL') }} 
+                            {% else %}
+                                <spam>zuletzt bearbeitet am {{ momentjs(data['last_modified']).format('LL') }}</spam>
+                            {% endif %}
+                            <br>
+                            ID:{{form.id.data}}
+                            </small></h6>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div><!--seventh row-->
+            
+            
+            
+        </form>
+</div>        
+
+<script>
+/*
+write a library that can deal with form data 
+that way in manner of a micro frontend
+and a library for customising the many mcfrontend layout  per user
+computed fields signaling via style
+the fields are css-conected to signaling does somehow comput
+react and radium
+*/
+/*-------------------------------------------------------------------
+using moments.js
+date changes: according week of year follows
+-------------------------------------------------------------------*/
+$("#date_of_plan_seed").change(function(){
+    var m = moment($("#date_of_plan_seed").val());
+    if(m.isValid()){
+        $('#week_of_plan_seed').val(m.format('W'));
+    } else {
+        $('#week_of_plan_seed').val("");
+     }   
+});
+
+$("#date_of_plan_plant").change(function(){
+    var m = moment($("#date_of_plan_plant").val());
+    if(m.isValid()){
+        $('#week_of_plan_plant').val(m.format('W'));
+    } else {
+        $('#week_of_plan_plant').val("");
+     }   
+});
+
+$("#date_of_plan_crop").change(function(){
+    var m = moment($("#date_of_plan_crop").val());
+    if(m.isValid()){
+        $('#week_of_plan_crop').val(m.format('W'));
+    } else {
+        $('#week_of_plan_crop').val("");
+     }   
+});
+</script>
+
+<script>
+/*---------------------------------------------------------------------
+week of year changes: according date will be emptied
+----------------------------------------------------------------------*/
+$("#week_of_plan_seed").change(function(){
+    $('#date_of_plan_seed').val("");
+});
+$("#week_of_plan_plant").change(function(){
+    $('#date_of_plan_plant').val("");
+});
+$("#week_of_plan_crop").change(function(){
+    $('#date_of_plan_crop').val("");
+});
+</script>
+<script>
+/*---------------------------------------------------------------------
+VegetablesConceptionForm.amount_of_plants on_change
+jQuery ajax(premisse,Field1.val,Field2.val...,new_value_of_changed_field)
+premisse is <option>value</option>
+---------------------------------------------------------------------*/
+$("#amount_of_plants" ).change(function() {
+    $.ajax({
+        //url : $SCRIPT_ROOT+'/_amount_of_plants_change',
+        url: $SCRIPT_ROOT + {{ url_for('.amount_of_plants_change')|tojson|safe }},
+        type : 'GET',
+        data : {amount_of_plants : $( "#amount_of_plants" ).val(),
+               grow_kind_id : $( '#grow_kind_id' ).val(),
+               planting_interval : $( "#planting_interval" ).val(),
+               amount_of_grow_kind_units : $( '#amount_of_grow_kind_units' ).val()
+               },
+        dataType: 'json',
+        })
+        
+        .done(function( json ){
+            console.log(json);
+            if (json.message){
+                $('#ajax_message').text(json.message);
+                return false;
+            }
+            console.log("setting values...");
+            $('#amount_of_grow_kind_units').val(json.amount_of_grow_kind_units);
+            $('#planting_interval').val(json.planting_interval);
+            $('#plants_per_square').val(json.plants_per_square);
+            $('#length_of_field').val(json.length_of_field);
+            $('#square_of_field').val(json.square_of_field);
+            
+        })
+        
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.log( "script_root: "+ $SCRIPT_ROOT);
+            console.dir( xhr );
+        });        
+
+});
+</script>
+<script>
+/*---------------------------------------------------------------------
+VegetablesConceptionForm.planting_interval on_change
+---------------------------------------------------------------------*/
+$("#planting_interval" ).change(function() {
+    $.ajax({
+        //url : $SCRIPT_ROOT+'/_amount_of_plants_change',
+        url: $SCRIPT_ROOT + {{ url_for('.planting_interval_change')|tojson|safe }},
+        type : 'GET',
+        data : {amount_of_plants : $( "#amount_of_plants" ).val(),
+               grow_kind_id : $( '#grow_kind_id' ).val(),
+               planting_interval : $( "#planting_interval" ).val(),
+               amount_of_grow_kind_units : $( '#amount_of_grow_kind_units' ).val()
+               },
+        dataType: 'json',
+        })
+        
+        .done(function( json ){
+            console.log(json);
+            if (json.message){
+                $('#ajax_message').text(json.message)
+            }
+            $('#amount_of_grow_kind_units').val(json. amount_of_grow_kind_units);
+            $('#plants_per_square').val(json.plants_per_square);
+            $('#length_of_field').val(json.length_of_field);
+            $('#square_of_field').val(json.square_of_field);
+            
+        })
+        
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.log( "script_root: "+ $SCRIPT_ROOT);
+            console.dir( xhr );
+        });        
+
+});
+</script>
+<script>
+/*---------------------------------------------------------------------
+VegetablesConceptionForm.amount_of_grow_kind_units on_change
+---------------------------------------------------------------------*/
+$("#amount_of_grow_kind_units" ).change(function() {
+    $.ajax({
+        //url : $SCRIPT_ROOT+'/_amount_of_plants_change',
+        url: $SCRIPT_ROOT + {{ url_for('.amount_of_grow_kind_units_change')|tojson|safe }},
+        type : 'GET',
+        data : {amount_of_plants : $( "#amount_of_plants" ).val(),
+               grow_kind_id : $( '#grow_kind_id' ).val(),
+               planting_interval : $( "#planting_interval" ).val(),
+               amount_of_grow_kind_units : $( '#amount_of_grow_kind_units' ).val()
+               },
+        dataType: 'json',
+        })
+        
+        .done(function( json ){
+            console.log(json);
+
+            $('#plants_per_square').val(json.plants_per_square);
+            $('#length_of_field').val(json.length_of_field);
+            $('#square_of_field').val(json.square_of_field);
+            
+        })
+        
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.log( "script_root: "+ $SCRIPT_ROOT);
+            console.dir( xhr );
+        });        
+
+});
+</script>
+
+<script>
+/*---------------------------------------------------------------------
+VegetablesConceptionForm.grow_kind_id on_change
+---------------------------------------------------------------------*/
+$("#grow_kind_id" ).change(function() {
+    $.ajax({
+        //url : $SCRIPT_ROOT+'/_amount_of_plants_change',
+        url: $SCRIPT_ROOT + {{ url_for('.grow_kind_id_change')|tojson|safe }},
+        type : 'GET',
+        data : {amount_of_plants : $( "#amount_of_plants" ).val(),
+               grow_kind_id : $( '#grow_kind_id' ).val(),
+               planting_interval : $( "#planting_interval" ).val(),
+               amount_of_grow_kind_units : $( '#amount_of_grow_kind_units' ).val()
+               },
+        dataType: 'json',
+        })
+        
+        .done(function( json ){
+            console.log(json);
+            if (json.message){
+                $('#ajax_message').text(json.message);
+                return false;
+            }
+            $('#amount_of_grow_kind_units').val(json. amount_of_grow_kind_units);
+            $('#planting_interval').val(json.planting_interval);
+            $('#plants_per_square').val(json.plants_per_square);
+            $('#length_of_field').val(json.length_of_field);
+            $('#square_of_field').val(json.square_of_field);
+            
+        })
+        
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.log( "script_root: "+ $SCRIPT_ROOT);
+            console.dir( xhr );
+        });        
+
+});
+</script>
+
+
+
+
+<script>
+/*
+$( "#planting_interval" ).change(function () {
+  alert( "Handler for .change() called." );
+});
+
+
+$( "#diversity_id" ).change(function(){
+    //var val = $( "#diversity_id" ).val();
+    alert(" new " + $( "#diversity_id" ).val());
+});
+*/
+</script>
+
+{% endblock content %} 
+
+{% block aside %}
+    <h5  class="subheader">{{the_product.item_name}} {{year_of_growth}}</h5>
+    <div class="grid-container">
+        <div class="grid-y">
+            {% for entrie in conceptions_micro %}
+            <div class="cell">
+                {% if entrie.imp_id %}
+                <div class="card" style="background-color:#e6f7d9; ">
+                {% else %}
+                <div class="card" style="background-color:#fff3d9; ">
+                {% endif %}
+                    <div class="card-divider" {% if data and entrie.id==data.id %} style="background-color:#fff3d9; color:#34495E ; font-size:530%" {% endif %}>
+                        {% if data and entrie.id==data.id %} {# if edit and id=id #}
+                            <h6 >{{entrie.name}}</h6>
+                        {% else %}
+                            <a href="{{ url_for('.conception_edit', conception_id=entrie.id) }}"><h5>{{ entrie.name }}<h5>
+                            </a>
+                        {% endif %}
+                    </div><!-- card-divider -->
+                    <div class="grid-x grid-padding-x">
+                        <div class=cell>
+                            <small>{{ entrie.hint|truncate(27) }}</small>
+                        </div>
+                    </div><!--grid-x -->
+                    <div class="grid-x grid-padding-x">
+                        <div class="cell medium-6">
+                        {% if entrie.week_of_plan_seed %}
+                            <strong>S</strong><small>KW:</small>&nbsp;<strong>{{entrie.week_of_plan_seed}}</strong>
+                        {% endif %}
+                        </div>
+                        <div class="cell medium-6">
+                        {% if entrie.week_of_plan_plant %}
+                            <strong>P</strong><small>KW:</small>&nbsp;<strong>{{entrie.week_of_plan_plant}}</strong>
+                        {% endif %}
+                        </div>
+                    </div><!--grid-x -->
+                    <div class="grid-x grid-padding-x">
+                        <div class="cell text-center">
+                            {% if entrie.diversity_name%}
+                                <small>{{ entrie.diversity_name }} {{ entrie.ident }}</small>
+                            {% endif %}
+                        </div>
+                       {########################### 
+                        <div class="cell medium-6">
+                            {% if entrie.ident%}
+                                <small>{{ entrie.ident }}</small>
+                            {% endif %}
+                        </div>
+                       ###########################} 
+                    </div><!--grid-x -->
+                    
+                    <div class="grid-x grid-padding-x">
+                        <div class="cell small-7">
+                            {% if entrie.amount_of_plants %}
+                                {{entrie.amount_of_plants}}&nbsp;<small>Stk.</small>
+                            {% endif %}
+                        
+                        </div>
+                        <div class="cell small-5">
+                            {% if entrie.square_of_field %}
+                                {{ entrie.square_of_field|default('0',true) }}&nbsp;<small>m²</small>
+                            {% endif %}
+                        </div>    
+                    </div><!--grid-x -->
+                    
+                    <div class="grid-x grid-padding-x">
+                        <div class="cell text-center">
+                            <small>{{entrie.our_name}}</small>
+                        </div>
+                    </div><!--grid-x -->
+                    <div class="grid-x">
+                        <div class="cell text-center">
+                            {% if entrie.imp_id %}
+                                <a href="{{ url_for('.implementation_edit',implementation_id=entrie.imp_id) }}" class="button small success">Zur Durchführung</a>
+                            {% else %}
+                                <a href="{{ url_for('.implementation_create_from_conception',conception_id=entrie.id) }}" class="button small">Durchführung starten</a>
+                            {% endif %}
+                        
+                        </div>
+                    </div><!--grid-x -->
+                </div><!-- card -->
+            </div><!-- y cell -->
+            {% endfor %}
+        </div><!-- grid-y -->
+    </div><!-- grid-container -->
+{% endblock aside %}-->

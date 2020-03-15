@@ -1,0 +1,98 @@
+{% extends "base.html"%}
+{% block title %}Pflanzungen {{fraction.name}} {{year_of_growth}}{%endblock%}
+{% block headline %}{% endblock headline %}
+{% block subheadline %}{% endblock subheadline %}
+{% block nav %}{% endblock nav %}
+
+{% block content %}
+<table  class="table unstriped hover">
+    <caption class="text-center" ><a href="{{ url_for('vegetables.conception_index', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }}">Planung {{fraction.name}} {{year_of_growth}}</a> Pflanzungen</caption>
+    <thead>
+        <tr>
+            <th>*</th>
+            <th>Kultur</th>
+            <th>Sorte</th>
+            <th>KW</th>
+            <th>Datum</th>
+            <th>Anzahl</th>
+            <th>Anbauform</th>
+            <th>Länge</th>
+            <th>Schlag</th>
+            <th>Notiz</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entry in entries %}
+        <tr>
+            <td>
+                {{ entry.hint }} {{ entry.id }}
+            </td>
+            <td nowrap><a href="{{ url_for('.conception_edit', conception_id=entry.id,  next=request.url) }}" title="Planung bearbeiten">
+                {{ entry.name }}
+                </a>
+            </td>
+            <td nowrap>
+                {% if entry.diversity_name %}   "{{ entry.diversity_name }}" {% endif %}
+            </td>
+            <td>
+                {% if entry.week_of_plan_plant %} <strong>{{entry.week_of_plan_plant}}</strong> {% endif %}
+            </td>
+            <td nowrap>
+                {% if entry.date_of_plan_plant %} {{momentjs(entry.date_of_plan_plant).format('ll')}} {% endif %}
+            </td>
+            <td nowrap>
+                {% if entry.amount_of_plants %} {{ entry.amount_of_plants }} {% endif %}
+            </td>
+            <td nowrap>
+                {% if entry.amount_of_grow_kind_units %}{{entry.amount_of_grow_kind_units}}*{% endif %}{% if entry.growkind_name %}{{ entry.growkind_name }}{% endif %}{% if entry.planting_interval %} | {{ entry.planting_interval|replace(".",",") }} {% endif %}
+            </td>
+            <td>
+                {% if entry.length_of_field %}{{entry.length_of_field}}{% endif %}
+            </td>
+            <td>
+                {% if entry.area_name %}{{entry.area_name}}{% endif %}
+            </td>
+            <td>
+                {% if entry.note %} {{ entry.note|safe }} {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+  
+{% endblock content%} 
+{% block aside %}
+{% endblock aside %}
+{########################################################
+            {{ entry.kultur }} {% if entry.diversity_name %}   "{{ entry.diversity_name }}" {% endif %}
+            {% if entry.area_name %} Schlag: {{ entry.area_name }} {% endif %}
+          </li>
+          <li>
+            {% if entry.week_of_plan_seed %} KW-Aussaat:{{entry.week_of_plan_seed}}, {% endif %}
+            {% if entry.date_of_plan_seed %} AussaatTermin:{{entry.date_of_plan_seed}}, {% endif %}
+            {% if entry.week_of_plan_plant %} KW-Pflanzung:{{entry.week_of_plan_plant}}, {% endif %}
+            {% if entry.date_of_plan_plant %} PflanzTermin:{{entry.date_of_plan_plant}}, {% endif %}
+            {% if entry.week_of_plan_crop %} KW-Ernte:{{entry.week_of_plan_crop}}, {% endif %}
+          </li>
+          <li>
+            {% if entry.amount_of_seed %} Saatgut: {{ entry.amount_of_seed }} {% endif %}
+          </li>
+          <li>
+            {% if entry.amount_of_plants %} Pflanzenanzahl:{{ entry.amount_of_plants }}, {% endif %}
+            {% if entry.amount_of_grow_kind_units %} {{ entry.amount_of_grow_kind_units }} * {% endif %}
+            {% if entry.growkind_name %} {{ entry.growkind_name }} - {% endif %}
+            {% if entry.length_of_field %} L&auml;nge: {{ entry.length_of_field }}, {% endif %}
+            {% if entry.plant_interval %} Pflanzabstand:{{ entry.plant_interval }} {% endif %}
+          </li>
+          <li>
+            {% if entry.square_of_field %} Fl&auml;che: {{ entry.square_of_field }}, {% endif %}
+            {% if entry.plants_per_square %} Pfl/A: {{ entry.plants_per_square }}, {% endif %}
+            
+          </li>
+          <li>
+            {% if entry.hint %} {{ entry.hint|safe }} {% endif %}
+          </li>
+          <li>
+            {% if entry.note %} {{ entry.note|safe }} {% endif %}
+########################################################}

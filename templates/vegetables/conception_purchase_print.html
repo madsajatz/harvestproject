@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<html>
+<head>
+<meta charset="utf-8">
+<script src="{{url_for('static',filename='js/moment/moment.js')}}"></script>
+</head>
+<body>
+<table >
+<captio><spam>Stand: {{ momentjs().format('LL') }}</spam></caption>
+  <thead>
+    <tr>
+      <th>KW</th>
+      <th>Anzahl</th>
+      <th>Name</th>      
+      <th>Kultur</th>
+      <th>Sorte</th>
+      {######################<th>Notiz</th>#############################}
+    </tr>
+  </thead>
+  {% for entry in entries %}
+  <tr>
+    <td>
+      {{ entry.week_of_plan_plant|e }}
+    </td>
+    <td >
+      {{ entry.amount_of_plants }}
+    </td>
+    <td>
+      {{ entry.name|e}}
+    </td>    
+    <td>
+      {{ entry.item_name|e }}
+    </td>
+
+    <td>
+      {% if entry.diversity_name %}"{{ entry.diversity_name }}" {% endif %}{% if entry.diversity_ident %} [{{ entry.diversity_ident }}] {% endif %}
+    </td>
+{################    
+    <td>
+      {% if entry.hint %} {{ entry.hint }} {% endif %}
+    </td>  
+################}    
+  </tr>
+  {% endfor %}
+</table>
+</body>
+</html>
+
+ 
+
+<!--
+  <ul class="list-unstyled">
+  
+  {% for entry in entries %}
+    
+      
+          <li> 
+            KW:{{entry.kw_plant}}&#x9;&#x9;Stk:{{ entry.anzahl }}&#x9;&#x9;{{ entry.name|safe }}&#x9;&#040;{{ entry.kultur|safe}}&#041;&#x9;{% if entry.sorte %}"{{ entry.sorte }}" {% endif %}{% if entry.ident %} [{{ entry.ident }}] {% endif %} 
+          </li>
+      
+    
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  
+  </ul>
+-->
+
+
+
+

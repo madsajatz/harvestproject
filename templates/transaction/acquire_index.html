@@ -1,0 +1,94 @@
+{#acquisition.index.html#}
+{% extends "base.html" %}
+
+{% block title %}Erfassen{% endblock %}
+{% block topbarheadline %} <div class="stat">Erfassen&nbsp;&rArr;&nbsp;Hinzufügen</div> {% endblock topbarheadline %}
+{% block nav %}{% endblock nav %}
+{% block flash%}
+{{ super() }}
+{% endblock flash%}
+{% block headline %}Headline edited with Atom{% endblock headline %}
+{% block subheadline %}{% endblock subheadline %}
+{% block content %}
+{# style="background-color:cyan"#}
+
+<!--jinja comment start -->
+{#
+<div class="grid-x grid-margin-y">
+    <div class="cell">
+    <div class="button-group">
+    <a href="{{ url_for('transaction.acquire_onepack',fraction_id=3)}}" class="button">
+<strong>&rArr;</strong> CSA 06.04.2018
+</a>
+    <a href="{{ url_for('transaction.acquire_onepack',fraction_id=3)}}" class="button">
+<strong>&rArr;</strong> CSA 29.03.2018
+</a>
+    <a href="{{ url_for('transaction.acquire_onepack',fraction_id=3)}}" class="button">
+<strong>&rArr;</strong> CSA 23.03.2018
+</a>
+    <a href="{{ url_for('transaction.acquire_onepack',fraction_id=3)}}" class="button">
+<strong>&rArr;</strong> CSA 16.03.2018
+</a>
+    <a href="{{ url_for('transaction.acquire_onepack',fraction_id=3)}}" class="button">
+<strong>&rArr;</strong> CSA 09.03.2018
+</a>
+    </div><!--button-group-->
+    </div><!--cell-->
+
+</div><!--grid-->
+#}
+<!--jinja comment end -->
+<div class="grid-x">
+<div class="cell small-4">
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+Freilandgemüse <strong>&rArr;</strong> CSA
+</a>
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=4,fraction_id=3)}}" class="button large">
+Gewächshäuser <strong>&rArr;</strong> CSA
+</a>
+
+
+
+
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=2)}}" class="button disabled large">
+    Ernte Freilandgemüse
+</a>
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=4,fraction_id=4)}}" class="button disabled large">
+    Ernte Gewächshäuser
+</a>
+</div><!--cell-->
+
+<div class="cell small-4">
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+CSA <strong>&rArr;</strong> Depot OS
+</a>
+
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+CSA <strong>&rArr;</strong> Tara-unverpackt
+</a>
+</div><!--cell-->
+<div class="cell small-4">
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+Freilandgemüse <strong>&rArr;</strong> Depot OS
+</a>
+
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+Gewächshäuser <strong>&rArr;</strong> Depot Os
+</a>
+
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+Freilandgemüse <strong>&rArr;</strong> Tara-unverpackt
+</a>
+
+<a href="{{ url_for('transaction.acquire_twopack', source_fraction_id=2,fraction_id=3)}}" class="button large">
+Gewächshäuser <strong>&rArr;</strong> Tara-unverpackt
+</a>
+
+
+
+</div><!--cell-->
+
+
+</div><!--grid-->
+{% endblock content %}
+{% block aside %}{% endblock aside %}

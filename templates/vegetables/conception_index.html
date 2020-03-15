@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% from '_macros.html' import vegetables_conception_card %}
+{###########{% from '_macros.html' import area_card %}#############}
+{% block title %}Planung-{{fraction.name}} {{year_of_growth}}{% endblock title %}
+
+{% block nav %} 
+    <ul class="vertical dropdown menu" data-dropdown-menu><!-- mainstart -->
+        {%- for element in productlist recursive %}
+            <li>
+            <a href="{{ url_for('.conception_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=element.product_id) }}">{{element.item_name}}</a>
+            {%- if element.children -%}
+                <ul class="vertical menu nested">{{ loop(element.children) }}</ul>
+            {%-endif %}</li>
+        {%-endfor %}
+    </ul><!-- mainend -->
+{% endblock nav %}
+
+{% block headline %}
+Planung für {{fraction.name}} {{year_of_growth}} <small class="text-right">zuletzt etwas verändert {{ momentjs(ts["last_modified"]).fromNow() }}</small>
+
+{% endblock headline %}
+
+{% block subheadline %}
+{{ summary.count_products }} Kulturen {{ summary.count_diversitys }} Sorten
+{{ (summary.sum_square /10000) |round(2) }} ha
+{% endblock subheadline %}
+
+{% block content %}
+<div class="cell">
+<div class="small button-group secondary">
+
+    <a class="hollow button" href=" {{ url_for('vegetables.conception_table', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }} ">Tabelle</a>
+
+    <a class="hollow button" href=" {{ url_for('vegetables.conception_seed', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }} ">Aussaaten</a>
+    
+    <a class="hollow button" href=" {{ url_for('vegetables.conception_implant', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }} ">Pflanzungen</a>    
+
+    <a class="hollow button" href=" {{ url_for('vegetables.conception_buy', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }} ">Zukauf</a>    
+
+    <a class="hollow button" href=" {{ url_for('vegetables.conception_culture', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }} ">Flächenbelegung</a>
+   
+    
+    <a class="hollow button" href=" {{ url_for('vegetables.conception_field', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }} ">Bodenvorbereitung</a>
+    
+    
+    
+</div>
+ {#### Stand:{{ momentjs(ts["last_modified"]).format('ll') }} ###}
+
+            
+</div><!-- cell -->
+            <div class="cell" >
+                {% for entrie in entries %}
+                    {{ vegetables_conception_card(entrie) }}
+                {% endfor %}
+            </div>
+            
+            {###############
+            <div class="cell small-12 medium-6">
+                <h6 class="subheader text-right"><small>
+                            <spam>zuletzt etwas verändert {{ momentjs(ts["last_modified"]).fromNow() }} </spam>
+                </small></h6>                
+            
+            
+            </div>
+            ##############}
+{% endblock content %}    
+
+{% block aside %}
+
+    <h5>Flächenplan {{year_of_growth}}</h5>
+    <div class="grid-container">
+        <div class="grid-y">
+            {% for entrie in area_info %}
+            <div class="cell">
+                <div class="card">
+                    <div class="card-divider">
+                        {% if entrie.area_id %}
+                            <a href="{{ url_for('.conception_area', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, area_id=entrie.area_id) }}">{{ entrie.our_name }}</a>
+                        {% else %}
+                            <a href="{{url_for('.unbound_area', fraction_id=fraction.fraction_id,year_of_growth=year_of_growth)}}">
+                            nicht zugewiesen
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="text-center">
+                        {{ entrie.square_of_field|default('0',true) }} m²
+                        {% if entrie.square_of_field and entrie.squarunits %}
+                            {{ ((entrie.square_of_field/entrie.squarunits)*100)|round|int }} %
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+    
+            {% endfor %}
+        </div>
+    </div>
+{% endblock aside %}
+
+
+{###########################################################
+{% block aside %}
+das problem ist wie immer der link, welche parameter wie und wohin
+    <h5>Flächen {{year_of_growth}}</h5>
+    {% for entrie in area_info %}
+        {{ area_card(entrie,'.conception_area', 'fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, area_id=entrie.area_id') }}
+    {% endfor %}
+{% endblock aside %}
+#############################################################}
+{% block footer %}
+
+  {% if year_of_growth==2000 %}
+                      <iframe src="https://www.google.com/maps/d/embed?mid=1NyIhf0J9BnNoND88Sbt0dWD23P-E_f-A" width="640" height="480"></iframe>
+  {% endif %}
+
+{% endblock footer %}

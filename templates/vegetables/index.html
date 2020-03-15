@@ -1,0 +1,209 @@
+<!doctype html>
+<html class="no-js" lang="de" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mad-Sajatz</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <div class="row">
+      <div class="large-12 medium-12 columns">
+        <h1>MAD_SAJATZ</h1>
+      </div>
+    </div><!--row-->
+    <form>
+    <div class="row"><!--first row-->
+      <div class="small-12 large-4  medium-4 columns">
+        
+          <label for="name" data-toggle="name-dropdown">Benamung</label>
+          <div class="dropdown-pane" id="name-dropdown" data-dropdown data-hover="true" data-hover-pane="true">
+            <h5>Einen Namen geben</h5>
+            <p>Es macht Sinn, einen Namen zu wählen, der mit der Kultur und dem Zeitpunkt im Anbau in Zusammenhang steht.</p><p>zu Beispiel: Knollenfenchel 7</p>
+          </div>  
+              <input id="name" type="text" placeholder="einen Namen geben">
+        
+      </div><!--class 4columns--> 
+      <div class="small-12 large-4 medium-4 columns">
+       
+          <label for="sorte">Sorte</label>
+              <select id="sorte" placeholder="Sortenauswahl">
+                <option>Sorte vom Ersten</option>
+                <option>Zweite Sorte</option>
+                <option>dreierlei Sorten</option>
+                <option>Sorte mit VIER Buchstaben</option>
+                
+              </select>  
+      </div><!--class 4columns-->
+      <div class="small-12 large-4 medium-4 columns">
+          <label for="schlag">Schlag</label>
+              <select id="schlag">
+                <option>Windrad 1</option>
+                <option>Unterm Gewächshaus</option>
+                <option>anderes Landstück</option>
+              </select> 
+      </div><!--class 4columns-->
+    </div><!--class first row-->
+    <div class="row"><!--class second row-->
+      <div class="small-12 large-4 medium-4 columns">
+        <fieldset class="fieldset">
+          <legend>Bestellung</legend>
+          
+              <input id="orderdate" type="date" placeholder="Datum">
+        </fieldset>  
+      
+      </div><!--class 4columns-->
+      <div class="small-12 large-4 medium-4 columns">
+        <fieldset class="fieldset">
+          <legend>Lieferung</legend>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="deliverydate" class="text-right middle">Datum:</label>
+            </div>
+            <div class="small-9 columns">
+              <input id="deliverydate" type="date">
+            </div>
+          </div><!--row-->       
+        </fieldset>  
+      </div><!--class 4columns-->
+      <div class="small-12 large-4 medium-4 columns">
+        <fieldset class="fieldset">
+          <legend>Adresse</legend>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="address" class="text-right middle">Adresse:</label>
+            </div>
+            <div class="small-9 columns">
+              <select id="address">
+                <option value="1">adresse1</option>
+                <option value="2">adresse2</option>
+                <option value="3">adresse3</option>
+                <option value="4">adresse4,Babelstrasse 42 in 45237 Neustadt am Hechtsee</option>
+              </select>
+            </div>
+          </div><!--row-->       
+        </fieldset>  
+      </div><!--class 4columns-->
+    </div><!--second row-->
+    <div class="row"><!--class third row-->
+      <div class="small-12 large-4 medium-4 columns">
+        <fieldset class="fieldset">
+          <legend>Aussaat</legend>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="seeddate" class="text-right middle">Datum:</label>
+            </div>
+            <div class="small-9 columns">
+              <input id="seeddate" type="date">
+            </div>
+          </div><!--row-->       
+        </fieldset>  
+      
+      </div><!--class 4columns-->
+      <div class="small-12 large-4 medium-4 columns">
+        <fieldset class="fieldset">
+          <legend>Auflaufen</legend>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="germingdate" class="text-right middle">Datum:</label>
+            </div>
+            <div class="small-9 columns">
+              <input id="germingdate" type="date">
+            </div>
+          </div><!--row-->       
+        </fieldset>  
+      </div><!--class 4columns-->
+      <div class="small-12 large-4 medium-4 columns">
+        <fieldset class="fieldset">
+          <legend>Qualität</legend>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="plantqual" class="text-right middle">?:</label>
+            </div>
+            <div class="small-9 columns">
+              <select id="plantqual">
+                <option value="1">samenfest</option>
+                <option value="2">F1 Hybrid</option>
+                <option value="3">GMO</option>
+              </select>
+            </div>
+          </div><!--row-->       
+        </fieldset>  
+      </div><!--class 4columns-->
+    </div><!--fhird row-->
+    <div class="row">
+      <div class="small-12 large-4 medium-4 columns">
+        <label for="pflanzung">Pflanzung</label>
+        <input type ="date" id="pflanzung">
+      </div><!--4colums-->
+      
+      <div class="small-12 large-4 medium-4 columns">
+        <label for="erntebeginn">Erntebeginn</label>
+        <input type ="date" id="erntebeginn">
+      </div><!--4colums-->  
+
+      <div class="small-12 large-4 medium-4 columns">
+        <label for="raemung">Räumung</label>
+        <input type ="date" id="raemung">
+      </div><!--4colums-->  
+  
+    </div><!--row-->
+
+    <div class="row small-uncollapse medium-collapse"><!--X row-->
+      <div class="small-12 large-4 medium-4 columns">
+        <fieldset class="fieldset">
+          <legend>Pflanzenanzahl</legend>
+          <div class="row">
+            <div class="small-2 columns">
+              <label for="plantamount" class="text-right middle">Anzahl:</label>
+            </div>
+            <div class="small-4 columns">
+              <input id="plantamount" type="number">
+            </div>
+            <div class="small-2 columns">
+              <label for="plantinterval" class="text-right middle">Abstand:</label>
+            </div>
+            <div class="small-4 columns">
+              <input id="plantinterval" type="number">
+            </div>    
+          </div><!--row-->       
+        </fieldset>  
+      </div><!--class 4columns-->
+      <div class="small-12 large-8 medium-8 columns">
+        <fieldset class="fieldset">
+          <legend>Anbauform</legend>
+          <div class="row">
+            <div class="small-1 columns">
+              <label for="gkuamount" class="text-right middle">Anzahl:</label>
+            </div>
+            <div class="small-2 columns">
+              <input id="gkuamount" type="number">
+            </div>
+            <div class="small-1 columns">
+              <label for="gku" class="text-right middle">x</label>
+            </div>
+            <div class="small-5 columns"> 
+              <select id="gku">
+                <option value="1">Beetanbau 1,2 Meter</option>
+                <option value="2">Beetanbau 1,5 Meter</option>
+              </select>  
+            </div>
+            <div class="small-1 columns">
+              <label for="laenge" class="text-right middle">Länge:</label>
+            </div>  
+            <div class="small-2 columns">
+              <input id="laenge" type="text">
+            </div>       
+          </div><!--row-->       
+        </fieldset>  
+      </div><!--class 4columns-->
+
+    </form>    
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

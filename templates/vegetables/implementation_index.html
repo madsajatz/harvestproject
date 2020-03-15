@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from '_macros.html' import vegetables_implementation_card %}
+{% block title %}Durchführung-{{fraction.name}} {{year_of_growth}}{% endblock title %}
+
+{% block nav %}
+<ul class="vertical dropdown menu" data-dropdown-menu><!-- mainstart -->
+    {%- for element in productlist recursive %}
+        <li>
+        <a href="{{ url_for ('.implementation_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=element.product_id) }}">{{element.item_name}}</a>
+            {%- if element.children -%}
+                <ul class="vertical menu nested">{{ loop(element.children) }}</ul>
+            {%- endif %}
+    {%- endfor %}
+</ul><!--mainend-->  
+{% endblock nav %}
+{# style="background-color:powderblue;" #}
+
+{% block headline %}
+Durchführung für {{fraction.name}} {{year_of_growth}}
+{% endblock headline %}
+
+{% block content %}
+    <div class="cell">
+    {% for entrie in entries %}
+        {{vegetables_implementation_card(entrie)}}
+    {% endfor %}
+    </div>
+{% endblock content %}   
+
+{% block aside %}
+      <div class="cell" >
+        aside()
+
+      
+        
+        
+      </div>
+{% endblock aside %}

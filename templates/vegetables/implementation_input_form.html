@@ -1,0 +1,176 @@
+{# implementation_input_form.html #}
+{% extends "base.html"%}
+{% from '_macros.html' import render_wtf_field %}
+
+{% block script %}
+    {{ super() }}
+    <script>$SCRIPT_ROOT={{request.script_root|tojson|safe}}</script>
+{% endblock %}
+
+{% block title %}
+{% if flag == 'edit' %}
+    Änderung der Durchführung
+{% else %}
+    Neue Durchführung 
+{% endif %}
+ {{the_product.item_name}} {{year_of_growth}} {{fraction.name}}
+{% endblock title%}
+
+{% block nav %}        
+<ul class="vertical dropdown menu" data-dropdown-menu><!--mainstart-->
+    {%- for element in productlist recursive %}
+        <li>
+        <a href="{{ url_for('.implementation_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=element.product_id) }}">{{element.item_name}}
+        </a>
+        {%- if element.children -%}
+            <ul class="vertical menu nested">{{ loop(element.children) }}</ul>
+        {%- endif %}
+        </li> 
+    {% endfor %}
+</ul><!--mainend-->
+{% endblock nav%}
+
+{% block headline %}
+    {% if flag == 'new' %}
+        ungeplante <a href="{{ url_for('.implementation_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=the_product.product_id) }}">Durchführung {{ the_product.item_name }} {{ year_of_growth }}</a> erstellen
+    {% elif flag == 'edit' %}
+        {%  if data.conception_id %}
+            geplante <a href="{{ url_for('.implementation_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=the_product.product_id) }}">Durchführung {{ the_product.item_name }} {{ year_of_growth }}</a> bearbeiten
+        {% else %}
+            ungeplante <a href="{{ url_for('.implementation_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=the_product.product_id) }}">Durchführung {{ the_product.item_name }} {{ year_of_growth }}</a> bearbeiten
+        {% endif %}
+    {% endif %}
+
+{% endblock headline %}
+
+
+{% block subheadline %}
+    {% if flag == 'edit' %} {#PUT#}
+        Änderung der Durchführung für {{form.name.data}} {{year_of_growth}}
+    {% elif flag == 'new' %} {#POST#}
+        Erstellung einer ungeplanten Durchführung für {{the_product.item_name}} {{year_of_growth}}
+    {% elif flag == 'cfc' %} {#Post prefilled#}
+        Durchführung nach Plan {{conception_data.name}} {{year_of_growth}}
+    {% endif %}
+    
+{% endblock subheadline %}
+
+
+
+{% block content%}
+
+<div class="callout success">
+    <form method="post">
+        {{ form.hidden_tag() }}
+            <div class="grid-x grid-margin-x"><!--first row-->
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.name) }}
+                </div>
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.diversity_id) }}
+                </div>
+                <div class=" cell small-12  medium-4 large-4">
+                    {{ render_wtf_field(form.area_id) }}
+                </div>
+            </div><!--first row-->
+            <div class="grid-x grid-margin-x"><!--second row-->
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_order) }}
+                </div>
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_deliver) }}
+                </div>
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.company_id) }}
+                </div>                
+            </div><!--second row-->
+            <div class="grid-x grid-margin-x"><!--third row-->
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_seeding) }}
+                </div>
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_germing) }}
+                </div>
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_prickout) }}
+                </div>                
+            </div><!--third row-->
+            <div class="grid-x grid-margin-x"><!--fourth row-->
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_planting) }}
+                </div>
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_yilding) }}
+                </div>
+                <div class=" cell small-12 medium-4 large-4">
+                    {{ render_wtf_field(form.date_of_act_removal) }}
+                </div>                
+            </div><!--fourth row-->
+            <fieldset class="fieldset"><legend>{{form.art_of_cultivation}}</legend>
+                <div class="grid-x grid-margin-x"><!--fifth row-->
+                    <div class=" cell small-12 medium-4 large-4">
+                       {{ render_wtf_field(form.amount_of_plants) }}
+                    </div>
+                    <div class=" cell small-12 medium-4 large-4">
+                       {{ render_wtf_field(form.planting_interval) }}
+                    </div>
+                    <div class=" cell small-12 medium-4 large-4">
+                       {{ render_wtf_field(form.plants_per_square) }}
+                    </div>
+                </div><!--fifth row-->
+                <div class="grid-x grid-margin-x"><!--sixth row-->
+                    <div class="cell small-12 medium-2">
+                        {{ render_wtf_field(form.amount_of_grow_kind_units) }}
+                    </div>
+                    <div class="cell small-12 medium-4">
+                        {{ render_wtf_field(form.grow_kind_id)}}
+                    </div>
+                    <div class=" cell small-12 medium-3">
+                        {{ render_wtf_field(form.length_of_field) }}
+                    </div>
+                    <div class="cell small-12 medium-3">
+                        {{ render_wtf_field(form.square_of_field) }}
+                    </div>
+                    <spam id="ajax_message"></spam>
+                </div><!--sixth row-->
+            </fieldset>
+            <div class="grid-x grid-margin-x"><!--seventh row-->
+                <div class=" cell small-8">
+                    {{render_wtf_field(form.hint)}}
+                </div>
+                <div class=" cell small-2">
+                    {{render_wtf_field(form.amount_of_seed)}}
+                </div>
+                <div class=" cell small-2">
+                    {{render_wtf_field(form.unit_of_seed)}}
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x"><!--eighth row-->
+                <div class="cell small-12">
+                    {{render_wtf_field(form.note)}}    
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x"><!--ninth row-->
+                <div class="cell small-12 medium-6">
+                    <button class="button" id="submit" type="submit">Machen Sie es so!</button>
+                    <a href="{{url_for('.implementation_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=the_product.product_id )}}" class="button secondary">Abrechen</a>
+                </div>
+                <div class="cell small-12 medium-6">
+                    {% if flag == 'edit' %}
+                        {% if form.id.data is not none %}
+                            <h6 class="subheader text-right"><small>
+                            <spam id="created">erstellt {{ momentjs(data['creation_date']).fromNow() }}</spam>
+                            <br>
+                            <spam id="modified">zuletzt bearbeitet am {{ momentjs(data['last_modified']).format('LL') }}</spam>
+                            <br>
+                            ID:{{form.id.data}}
+                            </small></h6>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            
+    </form>        
+</div>
+
+{% endblock content %}

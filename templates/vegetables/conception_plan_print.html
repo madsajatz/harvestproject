@@ -1,0 +1,134 @@
+{#-----############################################################################
+{% extends "base.html"%}
+{% block title %} {{fraction.name}} Plan {{year_of_growth}} {%endblock%}
+{% block headline %}{% endblock headline %}
+{% block subheadline %}{% endblock subheadline %}
+
+{% block nav %}
+{% if fraction.parent %}
+<a href="{{url_for(request.endpoint, fraction_id=fraction.parent.fraction_id, year_of_growth=year_of_growth)}}">{{fraction.parent.name|e}}</a>
+{% endif %}
+
+{% if fraction.children %}
+<ul class="menu">
+    {% for child in fraction.children %}
+    <li>
+    <a href="{{url_for(request.endpoint, fraction_id=child.fraction_id, year_of_growth=year_of_growth) }}">{{child.name|e}}</a>
+    <li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock nav %}
+
+{% block content %}
+<DIV >
+{{ request.url }}#{{pivot}}
+##for implement
+          <td class="text-center">
+            {% if entry.week %} <strong>{{ entry.week}}{% if entry.imp_date %}&nbsp;/&nbsp;{{ momentjs(entry.imp_date).format('w') }}{% endif %}</strong> {% else %}  {% endif %}
+          </td>
+############################################################################-----#}
+
+<!DOCTYPE html>
+<html lang="de-DE">
+<html>
+<head>
+<meta charset="utf-8">
+<script src="{{url_for('static',filename='js/moment/moment.js')}}"></script> {#locales#}
+<title> {{fraction.name}} Plan {{year_of_growth}}</title>
+</head>
+<style>
+#sticky {
+    position:  -webkit-sticky;
+    position: sticky;
+    top: 38%;
+    opacity: 0.33;
+    width: 68%;
+    color: #dedede;
+  }
+  
+  @media print{
+   .noprint{
+       display:none;
+   }
+}
+</style>
+<body>
+{####ts["last_modified"]######}
+<hr id="sticky" class="noprint">
+<table border="0">
+  <caption text-align="center">Planung {{fraction.name}} {{year_of_growth}}<small>  Stand:{{ momentjs(ts["last_modified"]).format('ll') }}  </small></caption>
+   <thead>
+    <tr>
+    <th>Überschrift</th>
+    <th>qm</th>
+    <th>Schlag</th>
+    <th>Anbau</th>
+    <th>L</th>
+    <th>Pfl&#178;</th>
+    <th>#/gr</th>
+    <th>*</th>
+    <th style="text-align:left;">KW</th>
+    <th>Benennung</th>
+    <th>Sorte</th>
+    <th>Text</th>
+   <!-- <th></th>
+    <th></th>
+    <th></th>  -->
+   </tr> 
+  </thead> 
+  
+  <tbody valign="top">
+
+  {% for entry in entries %}
+    <tr> 
+          <td> 
+              {{ entry.hint|d('',true) }}
+                {# entry.id #}
+                {# entry.imp_id #}
+          </td>
+          <td>
+              {% if entry.square_of_field %} {{ entry.square_of_field|replace(".",",") }}&#178; {% else %} {% endif %}
+          </td>
+          <td nowrap>
+              {{ entry.area_name|d('',true) }}
+          </td>
+          <td nowrap>
+             {% if entry.growkind %} {{ entry. growkind|replace(".",",")|e }} {% else %} ? {% endif %}
+          </td>
+          <td>
+             {% if entry.length_of_field %} {{ entry.length_of_field|replace(".",",") }}&#8596; {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.plants_per_square %} {{ entry.plants_per_square|replace(".",",") }}&#8225; {% else %}  {% endif %}
+          </td>          
+          <td>
+             {% if entry.count_seed %} {{ entry.count_seed|replace(".",",")}} {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.event %} {{ entry.event}} {% else %}  {% endif %}
+          </td>
+          <td nowrap>
+            {% if entry.week %} <strong>{{ entry.week }}</strong> {% else %}  {% endif %}
+            {% if entry.diem %} {{ momentjs(entry.diem).format('D.M.') }} {% else %}  {% endif %}
+          </td>
+          <td nowrap>
+              {{ entry.name|e }}
+          </td>
+          <td nowrap>
+              {{ entry.diversity|e}}
+          </td>
+          <td >
+             {% if entry.note%} {{ entry.note|e }} {% else %}  {% endif %}
+          </td>
+    </tr>
+    
+  {% else %}
+    <em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  </tbody>
+
+</table>
+
+</body>
+</html>

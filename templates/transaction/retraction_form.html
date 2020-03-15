@@ -1,0 +1,127 @@
+{#to be imported by retraction.html#}
+{#  style="background-color:powderblue;"  #}
+{% from '_macros.html' import render_wtf_field %}
+<div class="grid-container">
+    <div class="grid-x">
+        <div class="cell small-6 text-center">
+            <h5>
+            {{ momentjs(acquire_data.date).format('LL') }}
+            (KW{{ acquire_data.week }})
+            </h5>
+        </div>
+        <div class="cell small-6 text-left">
+            <h5>
+            {{ product_entries.item_name }}:
+            {{ acquire_data.acquisum }}
+            {{ acquire_data.unit_name }}
+            {{ acquire_data.hint }}
+            {% if acquire_data.alternatesum %}
+                /{{ acquire_data.alternatesum }}
+                {{ acquire_data.alternate_unit_name }}
+            {% endif%}
+            </h5>
+        </div>
+    </div>
+    <fieldset class="fieldset">
+        <legend>Hauptangaben</legend>
+        <div class="grid-x grid-padding-x">
+            <div class="medium-4 cell text-right">
+                {{render_wtf_field(form.roughly_amount)}}
+            </div><!--cell-->
+            <div class="medium-4 cell">
+                {{render_wtf_field(form.amount)}}
+            </div>
+            <div class="medium-4 cell text-middle">
+                {{render_wtf_field(form.unit_id)}}
+            </div>
+        </div><!--grid-x-->
+        <div class="grid-x grid-padding-x">
+            <div class="medium-4 cell">
+                Transport Kisten
+            </div><!--cell-->
+            <div class="medium-4 cell">
+                {{render_wtf_field(form.box_count)}}
+            </div>
+            <div class="medium-4 cell text-middle">
+                {{render_wtf_field(form.box_id)}}
+            </div>
+        </div><!--grid-x-->
+        <div class="grid-x grid-padding-x">
+            <div class="medium-4 cell">
+                Vehikel
+            </div>
+            <div class="medium-4 cell">
+                {{render_wtf_field(form.vehicle_count)}}
+            </div>
+            <div class="medium-4 cell">
+                {{render_wtf_field(form.vehicle_id)}}
+            </div>
+        </div><!--grid-x-->
+    </fieldset>
+    <div class="grid-x grid-padding-x">
+
+        <div class="cell">
+           <button type="submit" class="button expanded" name="send">Zurücknehmen!</button>
+        </div>
+    </div><!--grid-x-->     
+    
+    {% if acquire_data.alternatesum %}
+        <fieldset class="fieldset">
+            <legend>Alternativangaben</legend>
+            <div class="grid-x grid-padding-x">  
+                <div class="medium-4 cell">
+                    Alternate
+                </div><!--cell-->
+                <div class="medium-4 cell">
+                    {{render_wtf_field(form.alternate_amount)}} 
+                </div><!--cell-->
+                <div class="medium-4 cell">
+                    {{render_wtf_field(form.alternate_unit_id)}}
+                </div><!--cell-->
+    
+            </div><!--grid-x-->    
+        </fieldset>
+    {% endif %}
+    <fieldset class="fieldset">
+    <legend><a href="#" onclick="toggle_visibility('toggle_1');">Extra Tara in KiloGramm</a></legend>
+    <div class="grid-x grid-padding-x" id="toggle_1" style="display:none;">
+        <div class="medium-4 cell align-self-middle">
+            extra TARA
+        </div>
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.additional_tara)}}
+        </div>
+        <div class="medium-4 cell">
+            <small>für Großkisten, Erntekarren, Europaletten ...</small>
+        </div>
+    </div><!---grid-x-->
+    </fieldset>
+    <div class="grid-x grid-padding-x">
+    
+        {{render_wtf_field(form.hint)}}
+    
+    </div><!--grid-x-->    
+    
+<input type="hidden" name="fraction_id" value="{{form.fraction_id.data}}">
+<input type="hidden" name="source_fraction_id" value="{{form.source_fraction_id.data}}">
+<input type="hidden" name="product_id" value="{{form.product_id.data}}">
+        {{ form.csrf_token }}  
+        
+</div><!--class="grid-container"-->
+<script type="text/javascript">
+<!--
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'flex')
+          e.style.display = 'none';
+       else
+          e.style.display = 'flex';
+    }
+//-->
+</script>
+<p class="text-info">
+<spam>wtf:{{form.errors}}</span>
+</p>
+
+
+

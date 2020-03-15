@@ -1,0 +1,136 @@
+{############################################################################################################
+  <th>*</th> entry.event collumm's semantik('S','P','E') is set init class VegetablesConceptionModel(object)
+   self.plan_seed_sql -> 'S',self.plan_plant_sql -> 'P',self.plan_crop_sql -> 'E'
+#############################################################################################################}
+{% extends "base.html"%}
+{% block title %} {{fraction.name}} Plan {{year_of_growth}} {%endblock%}
+{% block headline %}{% endblock headline %}
+{% block subheadline %}{% endblock subheadline %}
+{###########################################################################
+{% block nav %}
+{% if fraction.parent %}
+<a href="{{url_for(request.endpoint, fraction_id=fraction.parent.fraction_id, year_of_growth=year_of_growth)}}">{{fraction.parent.name|e}}</a>
+{% endif %}
+
+
+
+
+{% if fraction.children %}
+<ul class="menu">
+    {% for child in fraction.children %}
+    <li>
+    <a href="{{url_for(request.endpoint, fraction_id=child.fraction_id, year_of_growth=year_of_growth) }}">{{child.name|e}}</a>
+    <li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock nav %}
+##################################################################################}
+{% block content %}
+<DIV >
+{#
+{{ request.url }}#{{pivot}}
+#}
+
+<table class="unstriped">
+  <caption class="text-center"><a href="{{ url_for('vegetables.conception_index', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }}">Planung {{fraction.name}} {{year_of_growth}}</a> <small>  Stand:{{ momentjs(ts["last_modified"]).format('ll') }}{# momentjs().format('d.MMMM')#}</small>
+  <a title="Printversion" href=" {{ url_for('vegetables.conception_table_print', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth ) }} " >print</a>
+  
+  </caption>
+   <thead>
+    <tr>
+    <th>Überschrift</th>
+    <th>qm</th>
+    <th>Schlag</th>
+    <th>Anbau</th>
+    <th>L</th>
+    <th>Pfl&#178;</th>
+    <th>#/gr</th>
+    <th>*</th>
+    <th>KW</th>
+    <th>Benennung</th>
+    <th>Sorte</th>
+    <th>Text</th>
+   <!-- <th></th>
+    <th></th>
+    <th></th>  -->
+   </tr> 
+  </thead> 
+  {% for entry in entries %}
+  {#style="background-color:#e6f7d9;"#}
+  {#  lif  entry.imp_date  == pivot will not work  #}
+  
+    <tr {% if entry.imp_date %} id="greenTR" {% elif  entry.imp_date  == pivot %} id="greenTRpivot " {% endif %}
+        {% if entry.imp_date == None and entry.id == pivot %} id="yellowTRpivot" {% else %} id="yellowTR" {% endif %}
+    
+    
+    >
+
+          <td> 
+              {{ entry.hint|d('',true) }}
+                {# entry.id #}
+                {# entry.imp_id #}
+                
+          </td>
+          <td>
+              {% if entry.square_of_field %} {{ entry.square_of_field|replace(".",",") }}&#178; {% else %} {% endif %}
+          </td>
+          <td>
+              {{ entry.area_name|d('',true) }}
+          </td>
+          <td nowrap>
+             {% if entry.growkind %} {{ entry. growkind|replace(".",",")|e }} {% else %} ? {% endif %}
+          </td>
+          <td>
+             {% if entry.length_of_field %} {{ entry.length_of_field|replace(".",",") }}&#8596; {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.plants_per_square %} {{ entry.plants_per_square|replace(".",",") }}&#8225; {% else %}  {% endif %}
+          </td>          
+          <td>
+             {% if entry.count_seed %} {{ entry.count_seed|replace(".",",")}} {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.event %} {{ entry.event}} {% else %}  {% endif %}
+          </td>
+          <td class="text-center">
+            {% if entry.week %} <strong>{{ entry.week}}{% if entry.imp_date %}&nbsp;/&nbsp;{{ momentjs(entry.imp_date).format('w') }}{% endif %}</strong> {% else %}  {% endif %}
+          </td>
+          <td nowrap>
+             {% if entry.name%}
+                <a
+                {% if entry.imp_date %}
+                     href="{{ url_for('.implementation_edit', implementation_id= entry.imp_id) }}" title="Durchführung bearbeiten">
+                    
+                {% elif entry.id %}
+                {#next= {{ request.args.get('url') }}#}
+                    href="{{ url_for('.conception_edit', conception_id=entry.id,  next=request.url) }}"  title="Planung bearbeiten">
+                {% else %}
+                    href="#">
+                
+                {% endif %}
+                {% if entry.id == pivot %}*{%endif%}
+                {{ entry.name|e }}
+                </a>
+                
+                
+             {% else %}  {% endif %}
+          </td>
+          <td nowrap>
+              {{ entry.diversity|e}}
+          </td>
+          <td>
+             {% if entry.note%} {{ entry.note|e }} {% else %}  {% endif %}
+          </td>
+    </tr>
+  {% else %}
+    <em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+</table>
+</DIV>
+S=Aussaat | P=Pflanzung | E=Ernte | L=Länge (Meter) | #/gr=Pflanzenanzahl/Saatgutmenge in (gramm) | Pfl&#178;=Pflanzen pro Quadrat(meter)
+<br>Einträge:{{entries|count}}
+
+
+{% endblock content%}  
+{% block aside %}{% endblock aside %}

@@ -1,0 +1,117 @@
+{#DEPP,Jonny  seen conception_plan#}
+{% extends "table_1.html"%}
+{% block title %}2013-14-15{%endblock%}
+{% block content %}
+<table>
+  <thead>  
+    <tr>
+    <th></th>
+    <th>qm</th>
+    <th>Schlag</th>
+    <th>L</th>
+    <th>#</th>
+    <th>Pfl&#178;</th>
+    <th>Int.</th>
+    <th>anbau</th>
+    <th>S</th>
+    <th>P</th>
+    <th>E</th>
+   <!-- <th>R</th> -->
+    <th>Benamung</th>
+    <th>Sorte</th>
+    <th>Text</th>
+    <th>saat</th>
+    <th>auflaufen</th>
+    <th>pikieren</th>
+    <th>pflanzen</th>
+    <th>ernten</th>
+    <th>räumen</th>
+    <th nowrap>?kulturdauer?</th>
+    <th>&#916; ago</th>
+   </tr>
+ </thead>
+ <tfoot>
+   <tr>
+   <td colspan="19">S=Aussaat | P=Pflanzung | E=Ernte | L=Länge (Meter) | #/gr=Pflanzenanzahl/Saatgutmenge in (gramm) | Pfl&#178;=Pflanzen pro Quadrat(meter)</td>
+   </tr>
+ <tfoot>
+  {% for entry in entries %}
+    <tr style="background-color:#e6f7d9;">
+          <td > 
+             {% if entry.hint %} {{ entry.hint }} {% else %} {% endif %}
+          </td>
+          <td>
+             {% if entry.square_of_field %} {{ entry.square_of_field|replace(".",",") }}&#178; {% else %} ~ {% endif %}
+          </td>
+          <td>
+             {% if entry. area_name %} {{ entry. area_name }} {% else %} ? {% endif %}
+          </td>
+          <td>
+             {% if entry.length_of_field %} {{ entry.length_of_field|replace(".",",") }}&#8596; {% else %} ~ {% endif %}
+          </td>
+          <td>
+             {% if entry.amount_of_plants %} {{ entry.amount_of_plants }} {% else %} # {% endif %}
+          </td>
+          <td>
+             {% if entry.plants_per_square %} {{ entry.plants_per_square|replace(".",",") }}&#8225; {% else %} ~ {% endif %}
+          </td> 
+          <td>
+             {% if entry.plant_interval %} {{ entry.plant_interval }} {% else %} int. {% endif %}
+          </td>
+          <td nowrap>
+             {% if entry.growkind_name %} {{ entry.growkind_name }} {% else %} anbau {% endif %}
+          </td>
+          <td>
+             {% if entry.date_of_act_seeding %} S<strong>{{ entry.week_of_act_seeding|int}}</strong> {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.date_of_act_planting %} P<strong>{{ entry.week_of_act_planting|int}}</strong> {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.date_of_act_yilding %} E<strong>{{ entry.week_of_act_yilding|int}}</strong> {% else %}  {% endif %}
+          </td>
+          <!--<td nowrap>
+             {% if entry.date_of_act_removal %} <strong>{{ entry.week_of_act_removal|int}}</strong> R {% else %}  {% endif %}
+          </td> -->
+          <td>
+             {% if entry.name %} {{ entry.name | safe }} {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.diversity_name %} {{ entry.diversity_name|safe }} {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.note%} {{ entry.note|e }} {% else %}  {% endif %}
+          </td>
+          <td>
+             {% if entry.date_of_act_seeding %} {{entry.date_of_act_seeding }} {% else %} {% endif %}
+          </td>
+          <td>
+             {% if entry.date_of_act_germing %} {{entry.date_of_act_germing }} {% else %} {% endif %}
+          </td>          
+          <td>
+             {% if entry.date_of_act_prickout %} {{entry.date_of_act_prickout }} {% else %} {% endif %}
+          </td>          
+          <td>
+             {% if entry.date_of_act_planting %} {{entry.date_of_act_planting }} {% else %} {% endif %}
+          </td>
+          <td>
+             {% if entry.date_of_act_yilding %} {{entry.date_of_act_yilding }} {% else %} {% endif %}
+          </td>          
+          <td>
+             {% if entry.date_of_act_removal %} {{entry.date_of_act_removal }} {% else %} {% endif %}
+          </td>   
+          <td>
+             {% if entry.act_duration %} {{entry.act_duration }} {% else %} {% endif %}
+          </td>
+          <td>
+             {% if entry.ago %} {{entry.ago}} {% else %} {% endif %}
+          </td>
+          
+    </tr>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+</table>
+
+{% endblock content%}  
+ 

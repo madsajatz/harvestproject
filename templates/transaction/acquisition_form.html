@@ -1,0 +1,191 @@
+{# to be imported by acquisition.html #}
+{% from '_macros.html' import render_wtf_field %}
+<div class="grid-container">
+    <div class="grid-x grid-padding-x">
+        <div class="medium-4 cell"> {# style="background-color:gray" #}
+             <img src="{{ url_for('static',filename='img/z_zz.jpg')}}" >
+        </div><!--cell-->
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.aq_date)}}
+        </div>
+        <div class="medium-4 cell text-middle">
+            <div class="expanded button-group">
+                <a  href="{{url_for('transaction.retract_twopack', fraction_id=fraction.fraction_id, source_fraction_id=source_fraction.fraction_id)}}" class="button small ">Retour</a>
+            
+                <a href="{{url_for('transaction.acquire_twopack', fraction_id=fraction.fraction_id, source_fraction_id=source_fraction.fraction_id, productgroup=session['productgroup'])}}" class="button small">Übersicht</a>
+            </div>
+        </div><!--cell-->
+    </div><!--grid-x-->
+    <fieldset class="fieldset">
+    <legend>Hauptangaben</legend>
+    <div class="grid-x grid-padding-x">
+        <div class="medium-4 cell text-right">
+            {{render_wtf_field(form.roughly_amount)}} 
+{# <input type="checkbox" name="roughly_amount" id="roughly_amount"> #}
+        </div><!--cell-->
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.amount)}}
+{# <input type="text" name="amount" id="amount" size=12 /> #}
+        </div><!--cell-->
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.unit_id)}}
+        </div><!--cell-->
+    
+    </div><!--grid-x-->
+    
+    <div class="grid-x grid-padding-x">
+        <div class="medium-3 cell">
+            Transport Kisten 
+        </div>
+        <div class="medium-1 cell text-right">
+            {{render_wtf_field(form.no_tara)}}
+        </div>
+        {# max_box_count could be an parameter of wtform.__init__ #}
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.box_count)}}
+        </div>
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.box_id)}}
+{#######
+############## a dream: css style the options with colors of the Boxes ###############
+{{form.box_id.label}}
+<select class="form-control" name="box_id" id="box_id">
+{% for item in boxset %}
+    {% if item.box_id == form.box_id.data %}
+        <option selected value="{{item.box_id}}" style="background-color:{{item.css_bgcolor}}; color:{{item.css_color}};">{{item.name}}</option>
+    {% else %}
+        <option value="{{item.box_id}}" style="background-color:{{item.css_bgcolor}}; color:{{item.css_color}};">{{item.name}}</option>
+    {% endif %}
+{% endfor %}
+
+</select>
+#########}
+        </div>
+        
+    </div><!--grid-x-->
+    <div class="grid-x grid-padding-x">
+        <div class="medium-4 cell">
+            Vehikel
+        </div>
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.vehicle_count)}}
+
+            
+        </div>
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.vehicle_id)}}
+        </div>
+        
+    </div><!--grid-x-->
+    {##############################################################################
+    <div class="grid-x grid-padding-x">
+        <div class="cell">
+            {{ render_wtf_field(form.implementation) }}
+        </div>
+    </div>
+    ################################################################################}
+    </fieldset>
+    <div class="grid-x grid-padding-x">
+
+        <div class="cell">
+           <button type="submit" class="button expanded" name="send">Hinzufügen!</button>
+        </div>
+    </div><!--grid-x-->    
+    <fieldset class="fieldset">
+    <legend><a href="#" onclick="toggle_visibility('toggle_1');">Alternativangaben</a></legend>
+    <div class="grid-x grid-padding-x" id="toggle_1" style="display:none;">  
+        <div class="medium-4 cell">
+            Alternate
+        </div><!--cell-->
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.alternate_amount)}}
+        </div><!--cell-->
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.alternate_unit_id)}}
+        </div><!--cell-->
+    
+    </div><!--grid-x-->
+    </fieldset>
+    <fieldset class="fieldset">
+    <legend><a href="#" onclick="toggle_visibility('toggle_2');" id="add_tara_link">Extra Tara in KiloGramm</a></legend>
+    <div class="grid-x grid-padding-x" id="toggle_2" style="display:none;">
+        <div class="medium-4 cell align-self-middle">
+            extra TARA
+        </div>
+        <div class="medium-4 cell">
+            {{render_wtf_field(form.additional_tara)}}
+        </div>
+        <div class="medium-4 cell">
+            <small>für Großkisten, Erntekarren, Europaletten ...</small>
+        </div>
+    </div><!---grid-x-->
+    </fieldset>
+    <div class="grid-x grid-padding-x">
+    
+        {{render_wtf_field(form.hint)}}
+    
+    </div><!--grid-x-->
+<input type="hidden" name="fraction_id" value="{{form.fraction_id.data}}">
+<input type="hidden" name="source_fraction_id" value="{{form.source_fraction_id.data}}">
+<input type="hidden" name="product_id" value="{{form.product_id.data}}">
+        {{ form.csrf_token }}
+
+</div><!--class="grid-container"-->
+<script type="text/javascript">
+<!--
+    function toggle_visibility(id) {
+        var e = document.getElementById(id);
+        if(e.style.display == 'flex')
+            e.style.display = 'none';
+        else
+            e.style.display = 'flex';
+    }
+//-->
+</script>
+<script type="text/javascript">
+<!-- //tara_or_not()
+    $( document ).ready(function(){
+        if (document.getElementById('no_tara').checked == true){
+            $("label[for='no_tara']").text("NoTara");
+            $("label[for='no_tara']").css('color','red');
+        } else {
+            $("label[for='no_tara']").text("Tara");
+            $("label[for='no_tara']").css('color','');
+        }
+    });
+            
+    $("#no_tara").change(function() {
+        if (document.getElementById('no_tara').checked == true){
+            //notara
+            $("#vehicle_id").attr('disabled', 'disabled');
+            $("#vehicle_count").attr('disabled', 'disabled');
+            $("#additional_tara").attr('disabled', 'disabled');
+            $("#additional_tara").val('');
+            $("label[for='no_tara']").text("NoTara");
+            $("label[for='no_tara']").css('color','red');
+            //$("[vehicle_count=option]").val('0');set the selectoption back to default
+            //$("#add_tara_link").prop('disabled', true);preventDefaults()
+        
+        } else {
+            $("#vehicle_id").removeAttr("disabled");
+            $("#vehicle_count").removeAttr("disabled");
+            $("#additional_tara").removeAttr("disabled");
+            $("label[for='no_tara']").text("Tara");
+            $("label[for='no_tara']").css('color','');
+        }
+    });
+//-->
+</script>
+
+------------
+<p class="text-info">
+<spam>wtf:{{form.errors}}</span><br>
+<span> FractioID:{{form.fraction_id.data}} </span><br>
+<span> SourceID:{{form.source_fraction_id.data}} </span><br>
+<span> Datum:{{form.aq_date.data}} </span><br>
+<span> ProductID:{{form.product_id.data}} </span><br>
+<span> UnitID:{{form.unit_id.data}} </span><br>
+<span> BoxID:{{form.box_id.data}} </span><br>
+<spam> req:{{request.url}}</spam>
+</p>
+-------------

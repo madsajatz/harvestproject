@@ -1,0 +1,73 @@
+{# _myapp/home/index.html_ #}
+
+{% extends "base.html" %}
+{% block title %}Harvestproject{% endblock %}
+{% block topbarheadline %}{% endblock topbarheadline %}
+{% block nav %}
+{{ super() }}
+{% endblock nav %}
+{% block flash%}
+{{ super() }}
+{% endblock flash%}
+{% block headline %}{% endblock headline %}
+{% block subheadline%}{% endblock subheadline%}
+{% block content %}
+<a class="button" href="{{ url_for('transaction.index') }}">Bruchteilhafen</a>
+         <!--- 
+        <a class="button" href="">{{ url_for('transaction.acquire_index') }}</a>
+        <a class="button" href="">{{ url_for('transaction.retract_index') }}</a>
+        <a class="button" href="{{ url_for('transaction.index') }}">Anschauen</a> 
+        --->
+        
+        
+    <div class="callout secondary small">
+        <h3 class="text-center"> Freilandgemüse</h3>
+        <div class="callout warning small">
+            <h6>Planung</h6>
+            <div class="button-group">
+            <a class="button" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2020 ) }} " >Planung 2020</a>
+            <a class="button" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2019 ) }} " >Planung 2019</a>
+            <a class="button" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2018 ) }} " >Planung 2018</a>
+            <a class="button" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2017 ) }} " >Planung 2017</a>
+            <a class="button" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2016 ) }} " >Planung 2016</a>
+            <a class="button" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2015 ) }} " >Planung 2015</a>
+            <a class="button" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2014 ) }} " >Planung 2014</a>
+            <a class="button warning hollow" href=" {{ url_for('vegetables.conception_index', fraction_id=2, year_of_growth=2000 ) }} " >Freispiel 2000</a>
+            </div>
+{###################        
+        <div class="button-group">
+            <a class="button" title="Printversion" href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2020 ) }} " >Tabelle 2020</a>
+            <a class="button" title="Printversion"  href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2019 ) }} " >Tabelle 2019</a>
+            <a class="button" title="Printversion"  href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2018 ) }} " >Tabelle 2018</a>
+            <a class="button" title="Printversion"  href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2017 ) }} " >Tabelle 2017</a>
+            <a class="button" title="Printversion"  href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2016 ) }} " >Tabelle 2016</a>
+            <a class="button" title="Printversion"  href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2015 ) }} " >Tabelle 2015</a>
+            <a class="button" title="Printversion"  href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2014 ) }} " >Tabelle 2014</a>
+            <a class="button warning hollow" href=" {{ url_for('vegetables.conception_table_print', fraction_id=2, year_of_growth=2000 ) }} " >Print 2000</a>
+            </div>
+##################}            
+        </div>
+        <div class="callout success small">
+            <h6>Durchführung</h6>
+            <div class="button-group">
+            <a class="button" href=" {{ url_for('vegetables.implementation_index', fraction_id=2, year_of_growth=2020 ) }} " >Durchführung 2020</a>
+            <a class="button" href=" {{ url_for('vegetables.implementation_index', fraction_id=2, year_of_growth=2019 ) }} " >Durchführung 2019</a>
+            <a class="button" href=" {{ url_for('vegetables.implementation_index', fraction_id=2, year_of_growth=2018 ) }} " >Durchführung 2018</a>
+            <a class="button" href=" {{ url_for('vegetables.implementation_index', fraction_id=2, year_of_growth=2017 ) }} " >Durchführung 2017</a>
+            <a class="button" href=" {{ url_for('vegetables.implementation_index', fraction_id=2, year_of_growth=2016 ) }} " >Durchführung 2016</a>
+            <a class="button" href=" {{ url_for('vegetables.implementation_index', fraction_id=2, year_of_growth=2015 ) }} " >Durchführung 2015</a>
+            <a class="button" href=" {{ url_for('vegetables.implementation_index', fraction_id=2, year_of_growth=2014 ) }} " >Durchführung 2014</a>
+            </div>
+        </div>
+    </div>
+        
+        
+        
+<!--    <p>
+            Es ist das Gesetz aller organischen und anorganischen, aller physischen und metaphysischen, aller menschlichen und übermenschlichen Dinge, aller echten Manifestationen des Kopfes, des Herzens und der Seele, dass das Leben in seinem Ausdruck erkennbar ist, dass die Form immer der Funktion folgt.<br>Louis Henry Sullivan 1896
+        </p>
+-->
+        
+    
+{% endblock content %} 
+{% block aside %}{% endblock aside %}

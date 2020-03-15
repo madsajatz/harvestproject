@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% from '_macros.html' import vegetables_conception_one %}
+{# all sets of one product #}
+{#####################{% from '_macros.html' import area_card %}#########################}
+
+{% block title %}{{the_product.item_name}} - Planung - {{year_of_growth}} {{fraction.name}}
+{% endblock title%}
+
+{% block nav %} 
+    <ul class="vertical dropdown menu" data-dropdown-menu><!--mainstart-->
+        {% for element in productlist recursive%}
+            <li>
+            <a href="{{ url_for('.conception_by_product_id', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=element.product_id) }}">{{element.item_name}}</a>
+            {%- if element.children -%}
+                <ul class="menu vertical nested">{{ loop(element.children) }}</ul>
+            {%- endif %}
+            </li>
+        {% endfor %}
+    </ul><!--mainend-->  
+{% endblock nav %}
+
+
+{% set list_count = summary.count_of_sets%}
+{% block headline %}
+    {% if list_count == 0 %}
+        
+            Noch kein Plan für 
+            <a href="{{ url_for('.conception_index', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth) }}">{{fraction.name}} {{year_of_growth}}</a> {{the_product.item_name}}
+    {% else %}
+            <a href="{{ url_for('.conception_index',fraction_id=fraction.fraction_id, year_of_growth=year_of_growth) }}">{{fraction.name}} {{year_of_growth}}</a> {{the_product.item_name}} -
+            {% if list_count == 1 %} ein Satz -
+            {% else %} {{ list_count }} Sätze -
+            {% endif %}
+            {% if summary.sum_amount_of_plants %}
+                {{summary.sum_amount_of_plants}}Stk. -
+            {% endif %}
+            {% if summary.sum_square_of_field %}
+                {{summary.sum_square_of_field|round}} m² - 
+            {% endif %}
+            {% if summary.sum_length_of_growlines %}
+                {{summary.sum_length_of_growlines|round}} lfd. Meter
+            {% endif %}
+    {% endif %}
+{% endblock headline %}
+
+{% block subheadline %}
+    {% if list_count == 0 %}
+            Beginnen Sie die Planung für {{the_product.item_name}} {{year_of_growth}}
+    {% else %}
+            Planübersicht für {{the_product.item_name}} {{year_of_growth}}
+    {% endif %}
+{% endblock subheadline %} 
+
+
+
+{% block content %}
+    {% if list_count == 0 %}  
+        <a class="button large expanded" href="{{ url_for('.conception_new', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=the_product.product_id) }}">Ersten Satz der Planung erstellen!</a> 
+    {% else %}
+        <a class="button small expanded" href="{{ url_for ('.conception_new', fraction_id=fraction.fraction_id, year_of_growth=year_of_growth, product_id=the_product.product_id) }}">Neuen Satz zur Planung hinzufügen!</a> 
+    {% endif %}
+    {% for entrie in entries %}
+        {{ vegetables_conception_one(entrie, pivot) }}
+    {% endfor %}  
+      <hr>
+{% endblock content %}     
+
+{% block aside %}
+    <h5>Flächen {{year_of_growth}}</h5>
+    <div class="grid-container">
+        <div class="grid-y">
+            {% for entrie in area_info %}
+            <div class="cell">
+                <div class="card">
+                    <div class="card-divider">
+                        {% if entrie.area_id %}
+                            <a href="{{ url_for('.conception_area', fraction_id=fraction.fraction_id,year_of_growth=year_of_growth,area_id=entrie.area_id) }}">{{ entrie.our_name }}</a>
+                        {% else %}
+                            <a href="{{url_for('.unbound_area', fraction_id=fraction.fraction_id,year_of_growth=year_of_growth)}}">
+                            nicht zugewiesen
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="text-center">
+                        {{ entrie.square_of_field|default('0',true) }} m²
+                        {% if entrie.square_of_field and entrie.squarunits %}
+                            {{ ((entrie.square_of_field/entrie.squarunits)*100)|round|int }} %
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+    
+            {% endfor %}
+        </div>
+    </div>
+{% endblock aside %}

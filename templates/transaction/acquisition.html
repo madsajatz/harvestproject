@@ -1,0 +1,215 @@
+{#acquisition.html#}
+{% extends "base.html" %}
+
+
+{% block script %}
+    {{ super() }}
+    <script>$SCRIPT_ROOT={{request.script_root|tojson|safe}}</script>
+{% endblock %}
+{% block title%}Erfassen {{source_fraction.name}} &rArr; {{fraction.name }}{% endblock title%}
+
+{% block topbarheadline %}
+<div class="stat">
+Erfassen {{source_fraction.name}} <strong>&rArr;</strong> {{fraction.name }}
+</div>
+{% endblock topbarheadline %}
+
+{% block nav %}
+
+<p>
+{{ source_fraction.name }}
+</p>
+
+{#
+<span>
+{%- for arg in  request.args %} {{arg}}  {% endfor -%}
+{{ request.args.get('productgroup') }}<br>
+{{ request.url_rule }}
+</span>
+
+
+<h3> {{fraction.name}}</h3>
+#}
+    <ul class="no-bullet">
+     {%- for item in fraction.get_first_product_list() %}
+        
+           {%- if session['productgroup'] and session['productgroup']|int == item.product_id|int %}
+           <li class="label secondary">
+           {% else %}
+           <li>
+           {% endif -%}
+
+
+         <a href="{{url_for('transaction.acquire_twopack', fraction_id=fraction.fraction_id, source_fraction_id=source_fraction.fraction_id, productgroup=item.product_id)}}">{{- item.item_name -}}</a>
+       </li>
+     {% endfor -%}  
+    </ul>
+
+{% endblock nav %}
+
+{% block flash %}
+{{ super() }}
+{% endblock flash %}
+
+{% block headline %}{% endblock headline %}
+
+{% block subheadline %}
+    {% if product_entries %}
+        {{product_entries.item_name}}
+        <small>{{product_entries.name_lat}}</small>
+    {% endif %}
+{% endblock subheadline %}
+
+{% block content %}
+{#style="background-color:powderblue;"#}
+{#grid-padding-x#}
+<div class="grid-container"  >
+    <div class="grid-x grid-padding-x">
+        <nav class="cell shrink">
+            <ul class="no-bullet">
+         {% if session['productgroup'] %}
+           {% for item in fraction.get_product_list(fraction.product_tree_id,session['productgroup']) %}
+             {% if item.has_data == -1 %}
+               <li><h6> {{item.item_name  }}</h6> </li>
+             {% else %}
+               <li>{% for i in range(item.levl) %} &nbsp; {% endfor %}
+               <a href="{{url_for('transaction.acquire_getsome', fraction_id=fraction.fraction_id, source_fraction_id=source_fraction.fraction_id, product_id=item.product_id, productgroup=session['productgroup'])}}">{{item.item_name  }}</a></li>
+             {%endif%}
+           {% endfor %}
+         {% else %}
+           <li><small>Internet of Bockmist</small></li>
+         {% endif %}
+            </ul>
+        </nav><!--cell-->
+        
+     
+        {% if form %}
+            <div class="cell auto" >
+                <form  action="{{request.url}}" method="POST">
+                {% include 'transaction/acquisition_form.html' %}
+                </form>
+            </div><!--cell-->
+        {% endif %}
+        
+        {% if transactions %}
+            <div class="cell auto" >
+                <div class="grid-x" >
+                    <div class="cell small-6">
+                    </div>
+                    <div class="cell auto text-right" >
+                        <a href="{{url_for('transaction.retract_twopack',
+                                            fraction_id=fraction.fraction_id,
+                                            source_fraction_id=source_fraction.fraction_id)}}" class="button">Retour für {{ session['acquiredate']|pgdate }}</a>
+                    </div>
+
+                </div> <!--grid-x-->
+            
+                <table class="hover">
+                    <caption style="border-style: solid; border-width:1px; border-color:#D3D3D3;">{{ session['acquiredate']|pgdate }} Bisher eingetragene Mengen</caption>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Waage</th>
+                            <th>Einheit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>
+                            <a href="{{url_for('transaction.acquire_getsome', fraction_id=fraction.fraction_id, source_fraction_id=source_fraction.fraction_id, product_id=transaction.product_id, unit_id=transaction.unit_id)}}">
+                            {{ transaction.item_name }}</a>
+                            {% if transaction.alternate_netto %}
+                                <br> <div class="text-right"><small></small></div>
+                            {% endif %}
+                            
+                            </td>
+                            <td>{{ transaction.netto|replace(".",",") }}
+                                {% if transaction.alternate_netto %}
+                                    <br> <small>{{ transaction.alternate_netto|replace(".",",") }}</small>
+                                {% endif %}
+                                
+                            </td>
+                            <td>{{ transaction.unit_name }}
+                                {% if transaction.alternate_netto %}
+                                    <br> <small>{{ transaction.alternate_unit_name }}</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div><!--cell-->
+      {#  {% else %}
+            <div class="cell auto">
+                {{ session['acquiredate']|pgdate }} Noch keine Mengen eingetragen.
+            </div>
+
+      #} 
+        {% endif %}
+    </div><!--grid-x-->
+    <script>
+    window.onload = function() {
+    document.getElementById("amount").focus();
+    };
+    </script>
+</div><!--grid-container-->
+<div class="grid-container"  style="background-color:cyan">
+    <div class="grid-x grid-padding-x">
+        <div class="cell auto">
+            {#lipsum(3)#}
+        </div><!--cell-->
+    </div><!--grid-x-->
+</div><!--grid-container-->
+{% endblock content %}
+
+{% block aside %}
+    {%- for history in history_entries %}
+        <div class="radius bordered shadow card">
+            <div class="card-divider">
+                <h6>{{ history.item_name}}</h6><br>
+            </div>
+               
+            
+            <div class="card-section">
+                <div class="text-right">
+                    <small> {{ momentjs(history.date).format('LL') }} </small>
+                </div>
+            
+                <div class="text-center">
+                    {% if history.roughly_amount%} ca. {% endif %}
+                    {{ history.amount|replace(".",",") }} {{ history.unit_name }}
+                    {% if history.no_tara %}
+                        <br>
+                        <small>noTara</small>
+                    {% endif %}
+                    {% if history.box_count != 0 %}
+                        <br>
+                        <small>{{ history.box_count }} x {{ history.caliber }} {{ history.name }} &oslash; 
+                        {{ (history.amount / history.box_count) |round(1)|replace(".",",") }} {{ history.unit_name }}</small>
+                    {% endif %}
+                    {% if history.alternate_amount %}
+                        <br>
+                        <small>{{ history.alternate_amount |replace(".",",") }} {{ history.alternate_unit_name }}</small>
+                    {% endif %}
+                    {% if history.additional_tara %}
+                        <br>
+                        <small>SuperTara: {{ history.additional_tara }} Kg</small>
+                    {% endif %}
+                    {% if history.hint %}
+                        <br>
+                        <small>! {{ history.hint }} !</small>
+                    {% endif %}
+                    
+                    {% if history.minute_age < 20 %}{#junger than 20 Minutes --> deleteable#}
+                        <hr>
+                        <a class="button rounded bordered shadow small primary" href="{{ url_for('.acquire_delete', fraction_id=fraction.fraction_id,timestamp=history.ts, next_url=request.url) }}">Löschen!</a>
+                    {% endif %}
+                </div>
+            </div><!--card-section-->
+        </div><!--class card-->
+    {% endfor -%}
+
+{% endblock aside %}

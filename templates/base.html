@@ -1,0 +1,119 @@
+<!doctype html>
+{% from '_macros.html' import flash_messages %}
+<html class="no-js" lang="de" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+   
+        <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='css/foundation.css') }} ">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static', filename='css/app.css')}} ">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    
+{% block script %}
+        <script src="{{url_for('static',filename='js/vendor/jquery.js')}}"></script>
+        <script src="{{url_for('static',filename='js/moment/moment.js')}}"></script>
+        <script src="{{url_for('static',filename='js/moment/locale/de.js')}}"></script>
+        
+        <script>
+            moment.locale('de');
+        </script>
+{% endblock script%}
+    
+        <title>{% block title %}{% endblock title%}</title>
+    </head>
+    <body>
+        <div class="top-bar"><!--top-bar-->
+            <div class="top-bar-title">
+                <a href="{{ url_for('home.index') }}">HarvestProject</a>
+            </div>
+            
+            
+                <div class="top-bar-left text-center">
+                    <!--      thema des tages         -->
+                    {% block topbarheadline %}{% endblock %}
+                    <!--      thema des tages         -->
+                </div>
+                <div class="top-bar-right">
+                    <ul class="menu">
+
+                        
+                        <li><font color="#dedede"><small>user_login</small></font></li>
+                    </ul>
+                </div>
+        </div> <!--top-bar -->
+    <div class="grid-x grid-margin-x">
+        <nav class="cell shrink">
+            {% block nav %}
+                
+            {% endblock nav%}
+        </nav>
+        <div class="cell auto">
+            <div class="grid-x grid-margin-x">
+            
+               <article class="cell small-12 medium-9">
+                    <div class="text-center">
+                        {% block flash%} {{ flash_messages() }} {% endblock %}
+                    </div>
+                    <h5>{% block headline %}HeadLine{% endblock %}
+                    </h5>
+                    <h4 class="subheader text-center">
+                        {% block subheadline %}SubHeadLine{% endblock %}
+                    </h4>
+                        {% block content %}
+                            content
+                        {% endblock %} 
+               </article> 
+               <aside class="cell small-12 medium-3">
+                       {% block aside %}{{lipsum(1)}}{% endblock %}
+               </aside>
+
+
+            
+            </div>
+        </div>
+    </div>
+    <div class="grid-x grid-margin-x"> 
+    <div class="cell">
+    <br><br><br>
+    <footer style="background-color:#607D8B;">
+    {% block footer %}
+        <!---
+        <small style="color:#f1f1f1">
+        Overnight Productions feat. Mad Sajatz(2010-2019)</small><br>
+        <center>
+        <img src="{{ url_for('static',filename='img/Skull-Bunny-Rabbit-pirate-skull-bones-rock-skeleton-Skully-.png')}}" >
+        </center>
+        -->
+    {####    
+        {{ request.args.get('fraction_id') }}
+        <br>
+        {{ request.args.get('year_of_growth') }}
+        
+        <br>
+        query_string:{{ request.query_string }}
+        <br>
+        path:{{ request.path }}
+        <br>
+        base_url:{{ request.base_url }}
+        <br>
+        url_rule.endpoint:{{ request.url_rule.endpoint }}
+        <br>
+        next:{{ request.values.get('next') }}
+        <br>
+    ####}
+        
+        
+    {% endblock footer %}
+    </footer>
+    </div>
+    </div>
+    <script src="{{url_for('static',filename='js/vendor/jquery.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendor/what-input.js')}}"></script>
+    <script src="{{url_for('static',filename='js/vendor/foundation.js')}}"></script>
+    <script src="{{url_for('static',filename='js/app.js')}}"></script>
+    
+
+  </body>
+</html>

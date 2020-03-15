@@ -1,0 +1,316 @@
+{#######################################################################}
+{# GLOBALS                                                             #}
+{#######################################################################}
+{#---------------------------------------------------------------------#}
+{# render WTForm Field
+{#---------------------------------------------------------------------#}
+{% macro render_wtf_field(field) %}
+{{ field.label }}
+{{ field }}
+{% if field.errors %}
+<span class="label warning">
+    {% for error in field.errors %} {{error|e}}{% endfor %}
+</span>
+{% endif %}
+{% endmacro %}
+
+{#---------------------------------------------------------------------#}
+{# flashing messages (primary, success, warning, alert)
+{#---------------------------------------------------------------------#}
+{% macro flash_messages() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+
+    {% for category, message in messages %}
+      <spam class="label {{ category }}">{{ message }}</spam>
+    {% endfor %}
+
+  {% endif %}
+{% endwith %}
+{% endmacro %}
+
+{#---------------------------------------------------------------------#}
+{# Displays a Card of one area   a link on .name leads to endpoint...  #}
+{#wie kann ich die parameter für url_for übergeben und zusammenbasteln?#}
+{#---------------------------------------------------------------------#}
+{% macro area_card(entrie, endpoint, url_param) %}
+    <div class="card float-right" style=" width:200px; margin:2px">
+        <div class="card-divider" text-center">
+            <a href="{{url_for(endpoint~","~ url_param)}}">entrie.our_name</a>
+            {{endpoint}}
+            <br>
+            {{url_param}}
+        </div>
+        <div class="card-section text-center">
+            {{ entrie.square_of_field }}m²
+            macro!
+        </div>
+    </div>
+{% endmacro %}
+
+
+
+{#######################################################################}
+{# VEGETABLES  GROWING      style="background-color:cyan;"             #}
+{#######################################################################}
+{#---------------------------------------------------------------------#}
+{# Veg_Implementation display one set (Satz) of one product            #}
+{#---------------------------------------------------------------------#}
+{% macro vegetables_implementation_one(entrie, pivot) %}
+<div class="callout success small {%- if entrie.id == pivot %} pivot {% endif -%}">
+    <div class="grid-x">
+        <div class="cell small-12 medium-4">
+            <h5><a title="Durchführung bearbeiten" href="{{ url_for('.implementation_edit',implementation_id=entrie.id)}}">{{ entrie.name }}</a></h5>
+        </div>
+        <div class="cell small-12 medium-4">
+            {% if entrie.amount_of_plants %}
+            <small>Pflanzenanzahl:</small>{{ entrie.amount_of_plants|default('~',true) }}
+            {% endif %}
+            {% if entrie.amount_of_seed %}
+            <small>Saatgutmenge:</small>{{entrie.amount_of_seed}}
+            {{entrie.seed_unit_name|default('',true)}}
+            {% endif %}
+            
+        </div>
+        <div class="cell small-12 medium-4">
+            {{ entrie.diversity_name|default('~Sorte~',true) }} {{ entrie.diversity_ident|default('',true) }}
+        </div>
+    </div>
+    <div class="grid-x">
+        <div class="cell small-12 medium-4">
+            <strong>S</strong><small>Kw:</small>
+            {% if entrie.week_of_act_seeding %}<strong>{{ entrie.week_of_act_seeding|int }}</strong>
+            {% else %}
+            {% endif %}
+            {% if entrie.date_of_act_seeding %}<small>{{ momentjs(entrie.date_of_act_seeding).format('LL') }}</small>
+            {% else %}
+            {% endif %}
+        </div>
+        <div class="cell small-12 medium-4">
+            <strong>P</strong><small>Kw:</small>
+            {% if entrie.week_of_act_planting %}<strong>{{ entrie.week_of_act_planting|int }}</strong>
+            {% else %}
+            {% endif %}
+            {% if entrie.date_of_act_planting %}<small>{{ momentjs(entrie.date_of_act_planting).format('LL') }}</small>
+            {% else %}
+            {% endif %}
+        </div>
+        <div class="cell small-12 medium-4">
+            <strong>E</strong><small>Kw:</small>
+            {% if entrie.week_of_act_yilding %}<strong>{{ entrie.week_of_act_yilding|int }}</strong>
+            {% else %}
+            {% endif %}
+            {% if entrie.date_of_act_yilding %}<small>{{ momentjs(entrie.date_of_act_yilding).format('LL') }}</small>
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="grid-x">
+        <div class="cell small-12 medium-4">
+            #{{entrie.id}} 
+        </div>
+        <div class="cell small-12 medium-4">
+            
+        </div>
+        <div class="cell small-12 medium-4">
+            
+        </div>
+    </div>
+    <div class="grid-x">
+        <div class="cell small-12 medium-5 text-center">
+            {{entrie.amount_of_grow_kind_units}} * {{entrie.growkind_name}}   a {{entrie.length_of_field|default('~',true)}} m
+        </div>
+        <div class="cell small-12 medium-3 text-center">
+            {{ entrie.square_of_field|default('~',true) }}m²
+        </div>
+        <div class="cell small-12 medium-4 text-center">
+            {{ entrie.area_name }}
+        </div>
+    </div>
+{% if entrie.hint %}
+    <div class="grid-x">
+        <div class="cell small-12">
+            <h6 class="subheader">{{entrie.hint}}</h6>
+        </div>
+    </div>
+{% endif %}
+</div>
+{%endmacro%}
+{#---------------------------------------------------------------------#}
+{# Implementation display summary card of one product   width: 200px; margin:2px                   #}
+{#---------------------------------------------------------------------#}
+{% macro vegetables_implementation_card(entrie) %}
+        <div class="card float-left greenBG">
+            <div class="card-divider text-center">
+                <a href="{{ url_for('.implementation_by_product_id',fraction_id=entrie.fraction_id, year_of_growth=entrie.year_of_growth, product_id=entrie.product_id)}}">
+                {{ entrie.item_name }}
+                </a>
+            </div>
+            <div class="card-section text-center">
+                
+                {% if entrie.count_of_sets ==1 %}
+                    ein Satz
+                {% else %}    
+                    {{entrie.count_of_sets}} Sätze
+                {% endif %}
+                
+                
+                {% if entrie.count_of_plants %}
+                    {{entrie.count_of_plants}} Pfl.
+                {% endif %}
+                <br>
+                
+                {% if entrie.qm %}
+                    {{entrie.qm}} m²
+                {% endif %}
+                <br>
+                
+                Kw {{entrie.min_week}}-{{entrie.max_week}}
+                
+            </div>
+        </div>
+{% endmacro %}
+{#---------------------------------------------------------------------#}
+{# Veg_Conception display one set (Satz) of one product                #}
+{#  style="background-color:cyan;"                                     #}
+{#---------------------------------------------------------------------#}
+{% macro vegetables_conception_one(entrie, pivot) %}
+<div class="callout warning small {%- if entrie.id == pivot %} pivot {% endif -%}">
+    <div class="grid-x" >
+        <div class=" cell small-9 medium-9">
+            <div class="grid-x grid-margin-x">
+                <div class="cell small-12 medium-4">
+                    <h5><a title="
+                    {% if entrie.is_locked %}
+                        Planung kann nicht mehr verändert werden" 
+                    {% else %}
+                    Planung bearbeiten"  
+                    {% endif %}
+                    href="{{ url_for('.conception_edit', conception_id=entrie.id) }}">{{entrie.name}}</a></h5>
+                </div>
+                <div class="cell small-12 medium-2">
+                    <div class="grid-y" >
+                        <div class="cell">
+                            {% if entrie.week_of_plan_seed %}
+                                <strong>S</strong><small>KW:</small>&nbsp;<strong>{{entrie.week_of_plan_seed}}</strong>
+                            {% endif %}
+                        </div>
+                        <div class="cell">
+                            {% if entrie.week_of_plan_plant %}
+                                <strong>P</strong><small>KW:</small>&nbsp;<strong>{{entrie.week_of_plan_plant}}</strong>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="cell small-6 medium-2">
+                    <div class="grid-y">
+                        <div class="cell">
+                            {% if entrie.amount_of_seed %}
+                                <strong>{{entrie.amount_of_seed}}</strong> {{entrie.seed_unit_name|default('',true)}}
+                            {% endif %}
+                        </div>
+                        <div class="cell">
+                            {% if entrie.amount_of_plants %}
+                                <strong>{{entrie.amount_of_plants}}</strong>   Stk.
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="cell small-6 medium-4 text-center">
+                    {{entrie.diversity_name|default("<small>Sorte nicht bekannt</small>"|safe,true)}}
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell small-12 medium-5 text-center">
+                    {% if entrie.amount_of_grow_kind_units%}
+                        {{entrie.amount_of_grow_kind_units}}&nbsp;x
+                    {% endif %}
+                    &nbsp;{{entrie.growkind_name}}&nbsp;&nbsp;{{entrie.length_of_field|default('?',true)}}&nbsp;<small>Meter</small>
+                </div>
+                <div class="cell small-12 medium-3 text-center">
+                    {{entrie.square_of_field|default('?',true)}}&nbsp;m²
+                </div>
+                <div class="cell small-12 medium-4 text-center">
+                    {{entrie.area_name|default("<small>Fläche unverortbar</small>"|safe,true)}}
+                </div>
+            </div>
+        {% if entrie.hint %}
+            <div class="grid-x grid-margin-x">
+                <div class="cell small-12">
+                    <h6 class="subheader">{{entrie.hint}}</h6>
+                </div>
+            </div>
+        {% endif %}
+        </div> <!-- cell small-9 --> 
+        <div class="cell small-12 medium-3">
+            <div class="grid-y ">
+                <div class="cell shrink text-center">
+                    {% if entrie.implementation_id %}
+            
+                        <a href="{{ url_for('.implementation_edit',implementation_id=entrie.implementation_id) }}" class="button small success expanded"> Zur Durchführung vom {{momentjs(entrie.implementation_start_date).format('LL') }}</a>
+                    {% else %}
+                    
+                        <a href="{{ url_for('.implementation_create_from_conception',conception_id=entrie.id) }}" class="button small expanded">Durchführung starten</a>
+                    {% endif %}
+                </div>
+                <div class="cell shrink text-center">
+                    {% if  not entrie.is_locked %}
+                        <a href="{{ url_for('.conception_delete',conception_id=entrie.id,next=request.base_url) }}" class="button tiny alert">Löschen</a>
+                    {% endif %}
+                </div>
+                <div class="cell shrink text-right">
+                    <h6 class=subheader>#{{entrie.id}}</h6>
+                </div>
+            </div><!-- grid-y -->
+        </div>
+    </div> <!-- grid-x -->
+</div>
+{% endmacro %}
+{#---------------------------------------------------------------------#}
+{# Conception display summary card of one product   index.html         #}
+{#---------------------------------------------------------------------#}
+{% macro vegetables_conception_card(entrie) %}
+        <div class="card float-left yellowBG" style="width: 200px; margin:2px;  ">
+            <div class="card-divider">
+                <a href="{{ url_for('.conception_by_product_id',fraction_id=entrie.fraction_id, year_of_growth=entrie.year_of_growth, product_id=entrie.product_id)}}">
+                {{ entrie.item_name }}
+                </a>
+            </div>
+            {#<img src="{{url_for('static', filename='img/r_rr.jpg')}}">#}
+            <div class="card-section text-center">
+                
+                {% if entrie.count_of_sets ==1 %}
+                    Ein Satz
+                {% else %}    
+                    {{entrie.count_of_sets}} Sätze
+                {% endif %}
+                
+                
+                {% if entrie.count_of_plants %}
+                    {{entrie.count_of_plants}} Pfl.
+                {% endif %}
+                <br>
+                
+                {% if entrie.qm %}
+                    {{entrie.qm}} m²
+                {% endif %}
+                <br>
+                
+                Kw {{entrie.min_week}}-{{entrie.max_week}}
+                
+            </div>
+        </div>
+{% endmacro %}
+
+{#---------------------------------------------------------------------#}
+{# <SELECT>DIVERSITY <OPTIONS>  (list of dicts, integer)               #}
+{# deprecated, new:: WTForm.select,choises                             #}
+{#---------------------------------------------------------------------#}
+
+{%- macro render_options_diversity(entries, diversity_id_pre_selected) -%}
+<option value="0" 
+{%- if diversity_id_pre_selected == 0 %} selected {%- endif -%}>--noch keine Sorte--</option>
+{%- for entrie in entries %}
+<option value="{{entrie.id}}" title="{{entrie.ident}}"{%- if entrie.id == diversity_id_pre_selected %} selected {%- endif -%} >{{entrie.name}}</option>
+{%- endfor -%}
+{%- endmacro -%}

@@ -1,0 +1,7 @@
+# -*- coding: utf-8 -*-
+# config.py
+#DEBUG = True
+#SERVER_NAME = '192.168.2.200:5000'
+#SESSION_COOKIE_NAME = '192.168.2.200:5000'
+#SESSION_COOKIE_DOMAIN = '192.168.2.200:5000'
+WTF_CSRF_SECRET_KEY = 'moresecret'

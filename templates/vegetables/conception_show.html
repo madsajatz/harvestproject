@@ -1,0 +1,46 @@
+{% extends "base.html"%}
+{% block title %} Plan#2015 {%endblock%}
+{% block content %}
+  <ul class=entries>
+  {% for entry in entries %}
+    <li><a name="{{ entry.id }}">{{ entry.name|e }}</a>
+      <div id="listcontent">
+        <ul>
+          <li> 
+            {{ entry.item_name }} {% if entry.diversity_name %}   "{{ entry.diversity_name }}" {% endif %}
+            {% if entry.area_name %} Schlag: {{ entry.area_name }} {% endif %}
+          </li>
+          <li>
+            {% if entry.week_of_plan_seed %} KW-Aussaat:{{entry.week_of_plan_seed}}, {% endif %}
+            {% if entry.date_of_plan_seed %} AussaatTermin:{{entry.date_of_plan_seed}}, {% endif %}
+            {% if entry.week_of_plan_plant %} KW-Pflanzung:{{entry.week_of_plan_plant}}, {% endif %}
+            {% if entry.date_of_plan_plant %} PflanzTermin:{{entry.date_of_plan_plant}}, {% endif %}
+            {% if entry.week_of_plan_crop %} KW-Ernte:{{entry.week_of_plan_crop}}, {% endif %}
+          </li>
+          <li>
+            {% if entry.amount_of_plants %} Pflanzenanzahl:{{ entry.amount_of_plants }}, {% endif %}
+            {% if entry.amount_of_grow_kind_units %} {{ entry.amount_of_grow_kind_units }} * {% endif %}
+            {% if entry.growkind_name %} {{ entry.growkind_name }} - {% endif %}
+            {% if entry.length_of_field %} L&auml;nge: {{ entry.length_of_field }}, {% endif %}
+            {% if entry.plant_interval %} Pflanzabstand:{{ entry.plant_interval }} {% endif %}
+          </li>
+          <li>
+            {% if entry.square_of_field %} Fl&auml;che: {{ entry.square_of_field }}, {% endif %}
+            {% if entry.plants_per_square %} Pfl/A: {{ entry.plants_per_square }}, {% endif %}
+            {% if entry.amount_of_seed %} Saatgut: {{ entry.amount_of_seed }} {% endif %}
+          </li>
+          <li>
+            {% if entry.hint %} {{ entry.hint|e }} {% endif %}
+          </li>
+          <li>
+            {% if entry.note %} {{ entry.note|e }} {% endif %}
+          </li>
+        </ul>
+      </div>
+    </li>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  </ul>
+  Einträge:{{entries|count}}
+{% endblock content%} 
